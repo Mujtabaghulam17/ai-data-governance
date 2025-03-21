@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Data Governance</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
   <header>
     <h1>AI Data Governance</h1>
     <p>Ensuring Compliance, Security & Transparency for AI Systems</p>
+    <!-- Dark Mode Toggle Button -->
     <button id="theme-toggle" aria-label="Toggle Dark Mode">
-  <i class="fas fa-moon"></i>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</button>
-
+      <i class="fas fa-moon"></i>
+    </button>
   </header>
 
   <section id="features">
@@ -103,58 +104,6 @@
   <zapier-interfaces-chatbot-embed is-popup="true" chatbot-id="cm8i6dnmz0019s3ik7xurhthg"></zapier-interfaces-chatbot-embed>
 
   <!-- JavaScript -->
-  <script>
-    function openModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) modal.showModal();
-    }
-
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) modal.close();
-    }
-
-    // Contact form
-    const contactForm = document.getElementById("contact-form");
-    if (contactForm) {
-      contactForm.addEventListener("submit", function(event) {
-        event.preventDefault();
-        alert("Thank you! We'll get back to you soon.");
-        this.reset();
-      });
-    }
-
-    // News API
-    document.addEventListener("DOMContentLoaded", () => {
-      const newsContainer = document.getElementById("news");
-      newsContainer.innerHTML += "<p>Loading latest AI news...</p>";
-      const apiKey = "050d73248da7e6e2c1560fb9526d1713";
-      const apiUrl = `https://api.mediastack.com/v1/news?access_key=${apiKey}&keywords=AI&languages=en&sort=published_desc&limit=5`;
-      const proxyUrl = "https://api.allorigins.win/get?url=";
-      const fullUrl = proxyUrl + encodeURIComponent(apiUrl);
-
-      fetch(fullUrl)
-        .then(res => res.json())
-        .then(data => {
-          try {
-            const parsed = JSON.parse(data.contents);
-            newsContainer.innerHTML = "<h2>Latest AI News</h2>";
-            parsed.data.forEach(article => {
-              newsContainer.innerHTML += `
-                <div class="news-item">
-                  <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
-                  <p>${article.description || "No description."}</p>
-                </div>
-              `;
-            });
-          } catch (err) {
-            newsContainer.innerHTML = "<p>Error loading news.</p>";
-          }
-        })
-        .catch(err => {
-          newsContainer.innerHTML = "<p>Could not fetch news at this time.</p>";
-        });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
