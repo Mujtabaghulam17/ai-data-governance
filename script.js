@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const newsContainer = document.getElementById('news');
   if (newsContainer) {
     newsContainer.innerHTML += '<p>Loading latest AI news...</p>';
-    const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+    const apiKey = '050d73248da7e6e2c1560fb9526d1713'; // Replace with your actual API key
     const apiUrl = `https://api.mediastack.com/v1/news?access_key=${apiKey}&keywords=AI&languages=en&sort=published_desc&limit=5`;
     const proxyUrl = 'https://api.allorigins.win/get?url=';
     const fullUrl = proxyUrl + encodeURIComponent(apiUrl);
