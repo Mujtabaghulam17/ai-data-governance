@@ -25,52 +25,37 @@
         </ul>
     </section>
 
-    <section id="pricing">
-        <h2>Pricing Plans</h2>
-        <table>
-            <tr>
-                <th>Plan</th>
-                <th>Features</th>
-                <th>Price</th>
-            </tr>
-            <tr>
-                <td>Starter</td>
-                <td>Up to 10 AI models, Basic Monitoring</td>
-                <td>$49/month</td>
-            </tr>
-            <tr>
-                <td>Professional</td>
-                <td>50 AI models, Advanced Reporting</td>
-                <td>$199/month</td>
-            </tr>
-            <tr>
-                <td>Enterprise</td>
-                <td>Unlimited AI models, Full Governance Suite</td>
-                <td>Contact Sales</td>
-            </tr>
-        </table>
-    </section>
-
+   <section id="pricing">
+    <h2>Pricing Plans</h2>
+    <button onclick="selectPlan('Starter')">Starter - $49/month</button>
+    <button onclick="selectPlan('Professional')">Professional - $199/month</button>
+    <button onclick="selectPlan('Enterprise')">Enterprise - Contact Us</button>
+</section>
+        
+<section id="news">
+    <h2>Latest AI News</h2>
+</section>
+        
     <section id="trust">
         <h2>Trust & Compliance</h2>
         <p>Our platform is designed to help businesses comply with GDPR, the EU AI Act, and ISO 27001 security standards.</p>
     </section>
 
-    <section id="contact">
-        <h2>Contact Us</h2>
-        <form action="#" method="post">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+   <section id="contact">
+    <h2>Contact Us</h2>
+    <form id="contact-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" required></textarea>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea>
 
-            <button type="submit">Send</button>
-        </form>
-    </section>
+        <button type="submit">Send</button>
+    </form>
+</section>
 
     <footer>
         <p>&copy; 2024 AI Data Governance. All rights reserved.</p>
