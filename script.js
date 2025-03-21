@@ -29,4 +29,22 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error fetching news:", error);
             newsContainer.innerHTML = "<p>Failed to load news. Please try again later.</p>";
         });
+    function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.showModal();
+  } else {
+    console.error(`Modal with ID ${modalId} not found.`);
+  }
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.close();
+  } else {
+    console.error(`Modal with ID ${modalId} not found.`);
+  }
+}
+
 });
