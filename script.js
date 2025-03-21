@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const newsContainer = document.getElementById("news");
     newsContainer.innerHTML = "<p>Loading latest AI news...</p>";
 
-    const apiKey = "YOUR_MEDIASTACK_API_KEY"; // Replace with your Mediastack API key
+    const apiKey = "050d73248da7e6e2c1560fb9526d1713"; // Replace with your Mediastack API key
     const apiUrl = `http://api.mediastack.com/v1/news?access_key=${apiKey}&keywords=AI&languages=en&sort=published_desc&limit=5`;
 
     // Use corsproxy.io to bypass CORS restrictions
