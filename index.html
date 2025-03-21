@@ -1,65 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Data Governance - Secure Your AI</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Data Governance</title>
+  <style>
+    /* Add your styling here */
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+    }
+    header, section, footer {
+      margin-bottom: 40px;
+    }
+    button {
+      margin-right: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .news-item {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+  </style>
 </head>
-    
-    <body>
-    <header>
-        <h1>AI Data Governance</h1>
-        <p>Ensuring Compliance, Security & Transparency for AI Systems</p>
-    </header>
+<body>
+  <header>
+    <h1>AI Data Governance</h1>
+    <p>Ensuring Compliance, Security &amp; Transparency for AI Systems</p>
+  </header>
 
-    <section id="features">
-        <h2>Key Features</h2>
-        <ul>
-            <li>Automated Compliance Monitoring</li>
-            <li>GDPR & EU AI Act Ready</li>
-            <li>Bias & Drift Detection</li>
-            <li>Data Security & Risk Management</li>
-            <li>Seamless Integration with ML Tools</li>
-        </ul>
-    </section>
+  <section id="features">
+    <h2>Key Features</h2>
+    <ul>
+      <li>Automated Compliance Monitoring</li>
+      <li>GDPR &amp; EU AI Act Ready</li>
+      <li>Bias &amp; Drift Detection</li>
+      <li>Data Security &amp; Risk Management</li>
+      <li>Seamless Integration with ML Tools</li>
+    </ul>
+  </section>
 
-   <section id="pricing">
+  <section id="pricing">
     <h2>Pricing Plans</h2>
     <button onclick="selectPlan('Starter')">Starter - $49/month</button>
     <button onclick="selectPlan('Professional')">Professional - $199/month</button>
     <button onclick="selectPlan('Enterprise')">Enterprise - Contact Us</button>
-</section>
-        
-<section id="news">
-  <h2>Latest AI News</h2>
-</section>
-        
-    <section id="trust">
-        <h2>Trust & Compliance</h2>
-        <p>Our platform is designed to help businesses comply with GDPR, the EU AI Act, and ISO 27001 security standards.</p>
-    </section>
+  </section>
 
-   <section id="contact">
+  <section id="news">
+    <h2>Latest AI News</h2>
+    <!-- News content will be dynamically loaded here -->
+  </section>
+
+  <section id="trust">
+    <h2>Trust &amp; Compliance</h2>
+    <p>Our platform is designed to help businesses comply with GDPR, the EU AI Act, and ISO 27001 security standards.</p>
+  </section>
+
+  <section id="contact">
     <h2>Contact Us</h2>
     <form id="contact-form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="message">Message:</label>
-        <textarea id="message" name="message" required></textarea>
-
-        <button type="submit">Send</button>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <br><br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <br><br>
+      <label for="message">Message:</label>
+      <br>
+      <textarea id="message" name="message" rows="5" cols="30" required></textarea>
+      <br><br>
+      <button type="submit">Send</button>
     </form>
-</section>
+  </section>
 
-    <footer>
-        <p>&copy; 2024 AI Data Governance. All rights reserved.</p>
-    </footer>
-        
- <script src="script.js"></script>
+  <footer>
+    <p>© 2024 AI Data Governance. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // ===== News Fetching Section =====
+      const newsContainer = document.getElementById("news");
+      if (newsContainer) {
+        // Show a loading message
+        newsContainer.innerHTML += "<p>Loading latest AI news...</p>";
+
+        // Use your real API key from mediastack.com
+        const apiKey = "050d73248da7e6e2c1560fb9526d1713";
+        // Use HTTPS to avoid mixed-content issues
+        const apiUrl = `https://api.mediastack.com/v1/news?access_key=${apiKey}&keywords=AI&languages=en&sort=published_desc&limit=5`;
+
+        // Use AllOrigins to bypass CORS restrictions
+        const proxyUrl = "https://api.allorigins.win/get?url=";
+        const fullUrl = proxyUrl + encodeURIComponent(apiUrl);
+
+        fetch(fullUrl)
+          .then(res => res.json())
+          .then(data => {
+            try {
+              const parsedData = JSON.parse(data.contents);
+              const articles = parsedData.data;
+              // Clear the loading message and display the news
+              newsContainer.innerHTML = "<h2>Latest AI News</h2>";
+              articles.forEach(article => {
+                newsContainer.innerHTML += `
+                  <div class="news-item">
+                    <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
+                    <p>${article.description || "No description."}</p>
+                  </div>
+                `;
+              });
+            } catch (e) {
+              console.error("Error parsing news data:", e);
+              newsContainer.innerHTML = "<p>Error processing news data. Please try again later.</p>";
+            }
+          })
+          .catch(err => {
+            console.error("Failed to load news:", err);
+            newsContainer.innerHTML = "<p>Could not fetch news. Please try again later.</p>";
+          });
+      } else {
+        console.warn("News container element with id 'news' not found.");
+      }
+
+      // ===== Pricing Plan Selection =====
+      window.selectPlan = function (plan) {
+        alert(`You selected the ${plan} plan!`);
+      };
+
+      // ===== Contact Form Submission =====
+      const contactForm = document.getElementById("contact-form");
+      if (contactForm) {
+        contactForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          alert("Thank you! We'll get back to you soon.");
+          this.reset();
+        });
+      } else {
+        console.warn("Contact form element with id 'contact-form' not found.");
+      }
+    });
+  </script>
 </body>
 </html>
