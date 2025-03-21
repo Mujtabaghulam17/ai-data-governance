@@ -14,6 +14,7 @@ header {
   color: #ffffff;
   padding: 20px 0;
   text-align: center;
+  position: relative;
 }
 
 header h1 {
@@ -84,31 +85,6 @@ dialog {
 }
 
 dialog::backdrop {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: #121212;
-  color: #e0e0e0;
-}
-
-body.dark-mode header {
-  background: #1f2a30;
-}
-
-body.dark-mode section {
-  background: #1e1e1e;
-}
-
-body.dark-mode footer {
-  background: #1f2a30;
-}
-
-body.dark-mode button {
-  background: #1f2a30;
-}
-
-body.dark-mode button:hover {
-  background: #35424a;
-}
+  background: rgba(0, 0, 0
+::contentReference[oaicite:0]{index=0}
+ 
