@@ -2,30 +2,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const newsContainer = document.getElementById("news");
     newsContainer.innerHTML += "<p>Loading latest AI news...</p>";
 
-    const realNewsAPI = "https://newsapi.org/v2/everything?q=AI&language=en&sortBy=publishedAt&apiKey=3f6048be17214fe08df5a6144be4c0cd";
+    const apiKey = "050d73248da7e6e2c1560fb9526d1713"; // Register on mediastack.com to get this
+    const url = `http://api.mediastack.com/v1/news?access_key=${apiKey}&keywords=AI&languages=en&sort=published_desc&limit=5`;
 
-    // Alternative Proxy
-    const proxy = "https://corsproxy.io/?";
-
-    fetch(proxy + encodeURIComponent(realNewsAPI))
+    fetch(url)
         .then(res => res.json())
         .then(data => {
-            if (!data || !data.articles || data.articles.length === 0) {
-                throw new Error("No articles found in response.");
+            if (!data.data || data.data.length === 0) {
+                throw new Error("No articles found.");
             }
 
             newsContainer.innerHTML = "<h2>Latest AI News</h2>";
-            data.articles.slice(0, 3).forEach(article => {
+            data.data.forEach(article => {
                 newsContainer.innerHTML += `
                     <div class="news-item">
                         <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
-                        <p>${article.description || "No description available."}</p>
+                        <p>${article.description || "No description."}</p>
                     </div>
                 `;
             });
         })
-        .catch(error => {
-            console.error("Error fetching or parsing news:", error);
-            newsContainer.innerHTML = "<p>Failed to load news. Please try again later.</p>";
+        .catch(err => {
+            console.error("Failed to load news:", err);
+            newsContainer.innerHTML = "<p>Could not fetch news.</p>";
         });
 });
