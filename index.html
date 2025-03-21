@@ -2,9 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Data Governance</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: url('https://source.unsplash.com/1600x600/?technology,data,ai') center/cover no-repeat;
+      color: #fff;
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1.3em;
+    }
+
+    section {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    section h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 10px;
+      color: #2a2a72;
+    }
+
+    #features img,
+    #trust img,
+    #pricing img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+
+    #pricing button {
+      background-color: #2a2a72;
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      margin: 8px;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #pricing button:hover {
+      background-color: #1e1e5a;
+    }
+
+    .news-item {
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      background-color: #333;
+      color: white;
+      margin-top: 60px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -21,23 +97,26 @@
       <li>Data Security & Risk Management</li>
       <li>Seamless Integration with ML Tools</li>
     </ul>
+    <img src="https://source.unsplash.com/1000x400/?compliance,analytics" alt="AI Feature Graphic">
   </section>
 
   <section id="pricing">
     <h2>Pricing Plans</h2>
-    <button onclick="openModal('starterModal')">Starter - $49/month</button>
-    <button onclick="openModal('professionalModal')">Professional - $199/month</button>
-    <button onclick="openModal('enterpriseModal')">Enterprise - Contact Us</button>
+    <button onclick="selectPlan('Starter')">Starter - $49/month</button>
+    <button onclick="selectPlan('Professional')">Professional - $199/month</button>
+    <button onclick="selectPlan('Enterprise')">Enterprise - Contact Us</button>
+    <img src="https://source.unsplash.com/1000x400/?finance,plans" alt="Pricing Plans">
   </section>
 
   <section id="news">
     <h2>Latest AI News</h2>
-    <!-- News content loads dynamically -->
+    <p>Loading latest news...</p>
   </section>
 
   <section id="trust">
     <h2>Trust & Compliance</h2>
     <p>Our platform helps businesses comply with GDPR, the EU AI Act, and ISO 27001 standards.</p>
+    <img src="https://source.unsplash.com/1000x400/?trust,security" alt="Trust and Compliance">
   </section>
 
   <section id="contact">
@@ -45,13 +124,10 @@
     <form id="contact-form">
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required><br><br>
-
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" required><br><br>
-
       <label for="message">Message:</label><br>
       <textarea id="message" name="message" rows="5" cols="30" required></textarea><br><br>
-
       <button type="submit">Send</button>
     </form>
   </section>
@@ -60,69 +136,27 @@
     <p>&copy; 2024 AI Data Governance. All rights reserved.</p>
   </footer>
 
-  <!-- Modals for pricing plan details -->
-  <dialog id="starterModal">
-    <h2>Starter Plan - $49/month</h2>
-    <p>Perfect for small teams getting started with AI compliance:</p>
-    <ul>
-      <li>Automated compliance alerts</li>
-      <li>Basic risk reports</li>
-    </ul>
-    <button onclick="closeModal('starterModal')">Close</button>
-  </dialog>
+  <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+  <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cm8i6dnmz0019s3ik7xurhthg'></zapier-interfaces-chatbot-embed>
 
-  <dialog id="professionalModal">
-    <h2>Professional Plan - $199/month</h2>
-    <p>For growing teams that need deeper governance controls:</p>
-    <ul>
-      <li>Advanced drift detection</li>
-      <li>Data lineage tracking</li>
-      <li>Regulatory audit dashboard</li>
-    </ul>
-    <button onclick="closeModal('professionalModal')">Close</button>
-  </dialog>
-
-  <dialog id="enterpriseModal">
-    <h2>Enterprise Plan - Contact Us</h2>
-    <p>Tailored for complex AI operations with enterprise-grade compliance needs:</p>
-    <ul>
-      <li>Custom compliance frameworks</li>
-      <li>Dedicated support</li>
-      <li>On-premise or hybrid deployment options</li>
-    </ul>
-    <button onclick="closeModal('enterpriseModal')">Close</button>
-  </dialog>
-
-  <!-- Zapier AI Assistant Embed - Alice -->
-  <script async type="module" src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js"></script>
-  <zapier-interfaces-chatbot-embed is-popup="true" chatbot-id="cm8i6dnmz0019s3ik7xurhthg"></zapier-interfaces-chatbot-embed>
-
-  <!-- JavaScript -->
   <script>
-    function openModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) modal.showModal();
+    function selectPlan(plan) {
+      alert(`You selected the ${plan} plan!`);
     }
 
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) modal.close();
-    }
-
-    // Contact form
+    // Contact form handling
     const contactForm = document.getElementById("contact-form");
     if (contactForm) {
-      contactForm.addEventListener("submit", function(event) {
+      contactForm.addEventListener("submit", function (event) {
         event.preventDefault();
         alert("Thank you! We'll get back to you soon.");
         this.reset();
       });
     }
 
-    // News API
+    // Fetch news
     document.addEventListener("DOMContentLoaded", () => {
       const newsContainer = document.getElementById("news");
-      newsContainer.innerHTML += "<p>Loading latest AI news...</p>";
       const apiKey = "050d73248da7e6e2c1560fb9526d1713";
       const apiUrl = `https://api.mediastack.com/v1/news?access_key=${apiKey}&keywords=AI&languages=en&sort=published_desc&limit=5`;
       const proxyUrl = "https://api.allorigins.win/get?url=";
@@ -131,23 +165,19 @@
       fetch(fullUrl)
         .then(res => res.json())
         .then(data => {
-          try {
-            const parsed = JSON.parse(data.contents);
-            newsContainer.innerHTML = "<h2>Latest AI News</h2>";
-            parsed.data.forEach(article => {
-              newsContainer.innerHTML += `
-                <div class="news-item">
-                  <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
-                  <p>${article.description || "No description."}</p>
-                </div>
-              `;
-            });
-          } catch (err) {
-            newsContainer.innerHTML = "<p>Error loading news.</p>";
-          }
+          const parsed = JSON.parse(data.contents);
+          newsContainer.innerHTML = "<h2>Latest AI News</h2>";
+          parsed.data.forEach(article => {
+            newsContainer.innerHTML += `
+              <div class="news-item">
+                <h3><a href="${article.url}" target="_blank">${article.title}</a></h3>
+                <p>${article.description || "No description available."}</p>
+              </div>
+            `;
+          });
         })
-        .catch(err => {
-          newsContainer.innerHTML = "<p>Could not fetch news at this time.</p>";
+        .catch(() => {
+          newsContainer.innerHTML = "<p>Could not load news at this time.</p>";
         });
     });
   </script>
