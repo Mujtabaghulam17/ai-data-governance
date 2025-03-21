@@ -1,85 +1,58 @@
-/* Base Styles */
+/* Base Layout */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f9f9f9;
   margin: 0;
-  padding: 0;
-  color: #333;
+  padding: 0 20px;
   line-height: 1.6;
-  transition: background-color 0.5s, color 0.5s;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
+/* Header */
 header {
-  background: url('https://source.unsplash.com/1600x600/?technology,data,ai') center/cover no-repeat;
+  background-color: #2a2a72;
   color: #fff;
   text-align: center;
-  padding: 100px 20px;
+  padding: 40px 20px;
 }
 
 header h1 {
-  font-size: 3em;
   margin: 0;
-  animation: fadeIn 2s ease-in-out;
+  font-size: 2.5em;
 }
 
 header p {
-  font-size: 1.3em;
+  font-size: 1.2em;
+  margin-top: 10px;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #2a2a72;
-  padding: 10px 20px;
-}
-
-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-}
-
-nav ul li {
-  margin: 0 15px;
-}
-
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5em;
-  cursor: pointer;
-}
-
+/* Sections */
 section {
-  max-width: 1000px;
   margin: 40px auto;
-  padding: 0 20px;
+  max-width: 900px;
 }
 
-section h2 {
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 10px;
+h2 {
   color: #2a2a72;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
 }
 
-#features img,
-#trust img,
-#pricing img {
-  width: 100%;
-  height: auto;
-  margin-top: 20px;
-  border-radius: 8px;
+/* Features List */
+#features ul {
+  list-style: none;
+  padding-left: 0;
 }
 
+#features li {
+  background: url('https://cdn-icons-png.flaticon.com/512/190/190411.png') no-repeat left center;
+  background-size: 18px;
+  padding-left: 30px;
+  margin-bottom: 12px;
+}
+
+/* Pricing Buttons */
 #pricing button {
   background-color: #2a2a72;
   color: white;
@@ -96,21 +69,112 @@ section h2 {
   background-color: #1e1e5a;
 }
 
+/* News Items */
 .news-item {
   border-bottom: 1px solid #ddd;
   padding: 15px 0;
 }
 
-footer {
-  text-align: center;
-  padding: 30px 10px;
-  background-color: #333;
-  color: white;
-  margin-top: 60px;
+.news-item h3 {
+  margin: 0;
+  font-size: 1.1em;
 }
 
-/* Dark Mode Styles */
-body.dark-mode {
-  background
-::contentReference[oaicite:2]{index=2}
- 
+.news-item p {
+  margin: 8px 0 0;
+  font-size: 0.95em;
+}
+
+/* Trust Section */
+#trust p {
+  background-color: #eef6ff;
+  border-left: 4px solid #2a2a72;
+  padding: 12px;
+  font-size: 1em;
+}
+
+/* Contact Form */
+#contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#contact-form input,
+#contact-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  width: 100%;
+}
+
+#contact-form button {
+  background-color: #2a2a72;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1em;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#contact-form button:hover {
+  background-color: #1e1e5a;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  background-color: #333;
+  color: white;
+  padding: 20px 10px;
+  margin-top: 60px;
+  font-size: 0.9em;
+}
+
+/* Modals */
+dialog {
+  border: none;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  font-size: 1em;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+dialog ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+dialog button {
+  background-color: #2a2a72;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.8em;
+  }
+
+  #pricing button {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  dialog {
+    width: 90%;
+  }
+}
