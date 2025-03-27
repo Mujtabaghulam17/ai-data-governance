@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Readiness Scan</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-zinc-100 dark:bg-zinc-900 min-h-screen">
+  <div id="root" class="p-6"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const questions = [
+      { id: 1, text: "Heeft jouw organisatie een duidelijke AI-strategie vastgelegd?" },
+      { id: 2, text: "Beschikt jouw organisatie over kwalitatieve en toegankelijke data?" },
+      { id: 3, text: "Is de IT-infrastructuur geschikt voor het draaien van AI-modellen?" },
+      { id: 4, text: "Worden AI-initiatieven beoordeeld op compliance met privacy- en ethische richtlijnen?" },
+      { id: 5, text: "Zijn er voldoende AI-vaardigheden en expertise aanwezig binnen het team?" }
+    ];
+
+    function ReadinessScan() {
+      const [answers, setAnswers] = useState({});
+      const [email, setEmail] = useState('');
+      const [submitted, setSubmitted] = useState(false);
+
+      const handleChange = (id, value) => {
+        setAnswers({ ...answers, [id]: parseInt(value) });
+      };
+
+      const averageScore = () => {
+        const values = Object.values(answers);
+        const total = values.reduce((acc, val) => acc + val, 0);
+        return values.length ? (total / values.length).toFixed(1) : 0;
+      };
+
+      const handleSubmit = async () => {
+        const payload = {
+          email,
+          answers,
+          average: parseFloat(averageScore()),
+        };
+
+        try {
+          await fetch('https://ai-readiness-backend.onrender.com/api/results', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          setSubmitted(true);
+        } catch (err) {
+          console.error('Error submitting data:', err);
+        }
+      };
+
+      return (
+        <div className="max-w-2xl mx-auto bg-white dark:bg-zinc-800 p-6 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-white">AI Readiness Scan</h2>
+          {!submitted ? (
+            <>
+              {questions.map((q) => (
+                <div key={q.id} className="mb-4">
+                  <label className="block text-zinc-700 dark:text-zinc-200 mb-2">{q.text}</label>
+                  <select
+                    className="w-full p-2 border border-zinc-300 rounded dark:bg-zinc-700 dark:text-white"
+                    onChange={(e) => handleChange(q.id, e.target.value)}
+                  >
+                    <option value="">Kies score (1-5)</option>
+                    {[1,2,3,4,5].map(val => (
+                      <option key={val} value={val}>{val}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+
+              <div className="mb-4">
+                <label className="block text-zinc-700 dark:text-zinc-200 mb-2">E-mailadres (optioneel)</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-2 border border-zinc-300 rounded dark:bg-zinc-700 dark:text-white"
+                  placeholder="jouw@bedrijf.nl"
+                />
+              </div>
+
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={handleSubmit}
+              >
+                Verstuur en bekijk resultaat
+              </button>
+            </>
+          ) : (
+            <div className="text-center">
+              <p className="text-lg text-zinc-900 dark:text-white mb-2">
+                Gemiddelde score: <strong>{averageScore()}</strong>
+              </p>
+              <p className="text-zinc-700 dark:text-zinc-300">
+                {averageScore() < 2.5 && "Je organisatie is nog niet klaar voor AI, begin met een datastrategie."}
+                {averageScore() >= 2.5 && averageScore() < 4 && "Je bent op de goede weg, versterk governance en infrastructuur."}
+                {averageScore() >= 4 && "Je organisatie is AI-ready! Tijd voor pilotprojecten."}
+              </p>
+              <button
+                className="mt-4 bg-zinc-300 dark:bg-zinc-600 px-4 py-2 rounded"
+                onClick={() => setSubmitted(false)}
+              >
+                Opnieuw invullen
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<ReadinessScan />, document.getElementById('root'));
+  </script>
+</body>
+</html>
