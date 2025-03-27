@@ -1,100 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Readiness Scan</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body { font-family: Arial, sans-serif; }
-    .question-block { margin-bottom: 1.5rem; }
-    .result { padding: 1rem; background-color: #f0f0f0; border-radius: 8px; }
-  </style>
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white">
-  <div class="max-w-xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-    <h1 class="text-2xl font-bold mb-6">AI Readiness Scan</h1>
-    <form id="readinessForm">
-      <div id="questionsContainer"></div>
+<body class="bg-zinc-100 dark:bg-zinc-900 min-h-screen">
+  <div id="root" class="p-6"></div>
 
-      <div class="mb-4">
-        <label for="email" class="block mb-1">E-mailadres (optioneel):</label>
-        <input type="email" id="email" name="email" class="w-full p-2 border rounded dark:bg-gray-700" placeholder="jouw@bedrijf.nl" />
-      </div>
+  <script type="text/babel">
+    const { useState } = React;
 
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Verstuur en bekijk resultaat</button>
-    </form>
-
-    <div id="result" class="mt-6 hidden result"></div>
-  </div>
-
-  <script>
     const questions = [
-      "Heeft jouw organisatie een duidelijke AI-strategie vastgelegd?",
-      "Beschikt jouw organisatie over kwalitatieve en toegankelijke data?",
-      "Is de IT-infrastructuur geschikt voor het draaien van AI-modellen?",
-      "Worden AI-initiatieven beoordeeld op compliance met privacy- en ethische richtlijnen?",
-      "Zijn er voldoende AI-vaardigheden en expertise aanwezig binnen het team?"
+      { id: 1, text: "Heeft jouw organisatie een duidelijke AI-strategie vastgelegd?" },
+      { id: 2, text: "Beschikt jouw organisatie over kwalitatieve en toegankelijke data?" },
+      { id: 3, text: "Is de IT-infrastructuur geschikt voor het draaien van AI-modellen?" },
+      { id: 4, text: "Worden AI-initiatieven beoordeeld op compliance met privacy- en ethische richtlijnen?" },
+      { id: 5, text: "Zijn er voldoende AI-vaardigheden en expertise aanwezig binnen het team?" }
     ];
 
-    const container = document.getElementById('questionsContainer');
-    questions.forEach((question, index) => {
-      const block = document.createElement('div');
-      block.className = 'question-block';
-      block.innerHTML = `
-        <label class="block mb-1">${question}</label>
-        <select name="q${index + 1}" class="w-full p-2 border rounded dark:bg-gray-700">
-          <option value="">Kies score (1-5)</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-      `;
-      container.appendChild(block);
-    });
+    function ReadinessScan() {
+      const [answers, setAnswers] = useState({});
+      const [email, setEmail] = useState('');
+      const [submitted, setSubmitted] = useState(false);
 
-    document.getElementById('readinessForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+      const handleChange = (id, value) => {
+        setAnswers({ ...answers, [id]: parseInt(value) });
+      };
 
-      const formData = new FormData(this);
-      let total = 0;
-      let count = 0;
-      const answers = {};
+      const averageScore = () => {
+        const values = Object.values(answers);
+        const total = values.reduce((acc, val) => acc + val, 0);
+        return values.length ? (total / values.length).toFixed(1) : 0;
+      };
 
-      for (let i = 1; i <= questions.length; i++) {
-        const score = parseInt(formData.get(`q${i}`));
-        if (score) {
-          total += score;
-          count++;
-          answers[`q${i}`] = score;
+      const handleSubmit = async () => {
+        const payload = {
+          email,
+          answers,
+          average: parseFloat(averageScore()),
+        };
+
+        try {
+          await fetch('https://ai-readiness-backend.onrender.com/api/results', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          setSubmitted(true);
+        } catch (err) {
+          console.error('Error submitting data:', err);
         }
-      }
+      };
 
-      const average = (total / count).toFixed(1);
-      const email = formData.get('email');
+      return (
+        <div className="max-w-2xl mx-auto bg-white dark:bg-zinc-800 p-6 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-white">AI Readiness Scan</h2>
+          {!submitted ? (
+            <>
+              {questions.map((q) => (
+                <div key={q.id} className="mb-4">
+                  <label className="block text-zinc-700 dark:text-zinc-200 mb-2">{q.text}</label>
+                  <select
+                    className="w-full p-2 border border-zinc-300 rounded dark:bg-zinc-700 dark:text-white"
+                    onChange={(e) => handleChange(q.id, e.target.value)}
+                  >
+                    <option value="">Kies score (1-5)</option>
+                    {[1,2,3,4,5].map(val => (
+                      <option key={val} value={val}>{val}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
 
-      const resultBox = document.getElementById('result');
-      resultBox.classList.remove('hidden');
+              <div className="mb-4">
+                <label className="block text-zinc-700 dark:text-zinc-200 mb-2">E-mailadres (optioneel)</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-2 border border-zinc-300 rounded dark:bg-zinc-700 dark:text-white"
+                  placeholder="jouw@bedrijf.nl"
+                />
+              </div>
 
-      let message = "";
-      if (average < 2.5) message = "Je organisatie is nog niet klaar voor AI, begin met een datastrategie.";
-      else if (average < 4) message = "Je bent op de goede weg, versterk governance en infrastructuur.";
-      else message = "Je organisatie is AI-ready! Tijd voor pilotprojecten.";
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={handleSubmit}
+              >
+                Verstuur en bekijk resultaat
+              </button>
+            </>
+          ) : (
+            <div className="text-center">
+              <p className="text-lg text-zinc-900 dark:text-white mb-2">
+                Gemiddelde score: <strong>{averageScore()}</strong>
+              </p>
+              <p className="text-zinc-700 dark:text-zinc-300">
+                {averageScore() < 2.5 && "Je organisatie is nog niet klaar voor AI, begin met een datastrategie."}
+                {averageScore() >= 2.5 && averageScore() < 4 && "Je bent op de goede weg, versterk governance en infrastructuur."}
+                {averageScore() >= 4 && "Je organisatie is AI-ready! Tijd voor pilotprojecten."}
+              </p>
+              <button
+                className="mt-4 bg-zinc-300 dark:bg-zinc-600 px-4 py-2 rounded"
+                onClick={() => setSubmitted(false)}
+              >
+                Opnieuw invullen
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
 
-      resultBox.innerHTML = `<p><strong>Gemiddelde score:</strong> ${average}</p><p>${message}</p>`;
-
-      try {
-        await fetch("https://ai-readiness-backend.onrender.com/api/results", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, answers, average: parseFloat(average) }),
-        });
-      } catch (err) {
-        console.error("Fout bij verzenden van resultaten:", err);
-      }
-    });
+    ReactDOM.render(<ReadinessScan />, document.getElementById('root'));
   </script>
 </body>
 </html>
