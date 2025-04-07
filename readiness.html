@@ -4,119 +4,294 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Readiness Scan</title>
+  <!-- Include Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Include React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <!-- Include Babel for JSX transformation -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* Smooth transition for dark mode */
+    body {
+       transition: background-color 0.3s ease;
+    }
+    /* Simple fade-in for the component */
+    #root > div {
+      opacity: 0;
+      animation: fadeIn 0.6s ease-out forwards;
+      animation-fill-mode: forwards;
+    }
+     @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Style radio buttons better */
+    .form-radio {
+        appearance: none;
+        border-radius: 50%;
+        width: 1.25em;
+        height: 1.25em;
+        border: 2px solid #6366f1; /* Indigo */
+        transition: 0.2s all linear;
+        margin-right: 0.5em;
+        position: relative;
+        top: 0.2em;
+    }
+    .form-radio:checked {
+        border: 6px solid #6366f1; /* Indigo */
+    }
+    .dark .form-radio {
+        border-color: #818cf8; /* Lighter Indigo for dark mode */
+    }
+     .dark .form-radio:checked {
+        border-color: #818cf8;
+    }
+
+  </style>
 </head>
-<body class="bg-zinc-100 dark:bg-zinc-900 min-h-screen">
-  <div id="root" class="p-6"></div>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col items-center justify-center p-4">
 
+  <!-- Optional: Link back to home -->
+   <div class="w-full max-w-2xl mb-4 text-left">
+       <a href="index.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">← Back to Home</a>
+   </div>
+
+  <!-- Container for React app -->
+  <div id="root" class="w-full max-w-2xl"></div>
+
+  <!-- React Component Script -->
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
+    // --- Configuration ---
     const questions = [
-      { id: 1, text: "Heeft jouw organisatie een duidelijke AI-strategie vastgelegd?" },
-      { id: 2, text: "Beschikt jouw organisatie over kwalitatieve en toegankelijke data?" },
-      { id: 3, text: "Is de IT-infrastructuur geschikt voor het draaien van AI-modellen?" },
-      { id: 4, text: "Worden AI-initiatieven beoordeeld op compliance met privacy- en ethische richtlijnen?" },
-      { id: 5, text: "Zijn er voldoende AI-vaardigheden en expertise aanwezig binnen het team?" }
+      { id: 1, text: "Heeft jouw organisatie een duidelijke, gedocumenteerde AI-strategie vastgelegd?" },
+      { id: 2, text: "Beschikt jouw organisatie over voldoende kwalitatieve, toegankelijke en relevante data voor AI?" },
+      { id: 3, text: "Is de IT-infrastructuur (rekenkracht, opslag, netwerk) schaalbaar en geschikt voor AI-workloads?" },
+      { id: 4, text: "Worden AI-initiatieven proactief beoordeeld op compliance (bv. GDPR, AI Act) en ethische richtlijnen?" },
+      { id: 5, text: "Zijn er voldoende AI-vaardigheden (data science, ML engineering, domeinexpertise) aanwezig of in te huren?" }
     ];
+    const backendUrl = 'https://ai-readiness-backend.onrender.com/api/results'; // Use your actual backend URL
 
+    // --- Helper Functions ---
+    const calculateAverageScore = (answers) => {
+      const values = Object.values(answers);
+      if (values.length === 0) return 0;
+      const total = values.reduce((acc, val) => acc + (parseInt(val, 10) || 0), 0);
+      // Only count answered questions for average calculation
+      return values.length > 0 ? (total / values.length) : 0;
+    };
+
+    const getFeedbackMessage = (score) => {
+      if (score < 2.5) return { text: "Basis leggen: Je organisatie staat aan het begin. Focus op het ontwikkelen van een duidelijke AI-visie en datastrategie.", color: "text-red-600 dark:text-red-400" };
+      if (score >= 2.5 && score < 4) return { text: "Goed op weg: Er is potentieel! Versterk governance, investeer in infrastructuur en ontwikkel benodigde vaardigheden.", color: "text-yellow-600 dark:text-yellow-400" };
+      return { text: "Klaar voor actie: Uitstekende basis! Je organisatie is klaar om AI-initiatieven en pilotprojecten op te schalen.", color: "text-green-600 dark:text-green-400" };
+    };
+
+    // --- React Component ---
     function ReadinessScan() {
       const [answers, setAnswers] = useState({});
       const [email, setEmail] = useState('');
-      const [submitted, setSubmitted] = useState(false);
+      const [isSubmitted, setIsSubmitted] = useState(false);
+      const [isLoading, setIsLoading] = useState(false);
+      const [error, setError] = useState(null);
+      const [averageScore, setAverageScore] = useState(0);
+      const [feedback, setFeedback] = useState({ text: '', color: '' });
 
-      const handleChange = (id, value) => {
-        setAnswers({ ...answers, [id]: parseInt(value) });
+      // Check if all questions have been answered
+      const isFormComplete = Object.keys(answers).length === questions.length &&
+                             Object.values(answers).every(val => val >= 1 && val <= 5);
+
+
+      useEffect(() => {
+        // Recalculate score whenever answers change
+        const newScore = calculateAverageScore(answers);
+        setAverageScore(newScore);
+        // Update feedback immediately if already submitted (e.g., if user goes back and changes)
+         if (isSubmitted) {
+            setFeedback(getFeedbackMessage(newScore));
+         }
+      }, [answers, isSubmitted]);
+
+
+      const handleAnswerChange = (id, value) => {
+        setAnswers(prevAnswers => ({ ...prevAnswers, [id]: parseInt(value, 10) }));
+         // Clear general error message when user interacts
+        if (error === "Vul a.u.b. alle vragen in.") {
+          setError(null);
+        }
       };
 
-      const averageScore = () => {
-        const values = Object.values(answers);
-        const total = values.reduce((acc, val) => acc + val, 0);
-        return values.length ? (total / values.length).toFixed(1) : 0;
+      const handleEmailChange = (e) => {
+        setEmail(e.target.value);
       };
 
-      const handleSubmit = async () => {
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (!isFormComplete) {
+          setError("Vul a.u.b. alle vragen in met een score van 1 tot 5.");
+          return;
+        }
+        setError(null);
+        setIsLoading(true);
+
+        const finalScore = calculateAverageScore(answers); // Recalculate before sending
+        setAverageScore(finalScore); // Update state
+        setFeedback(getFeedbackMessage(finalScore)); // Set feedback based on final score
+
         const payload = {
-          email,
+          email: email.trim() || null, // Send null if empty or just whitespace
           answers,
-          average: parseFloat(averageScore()),
+          average: parseFloat(finalScore.toFixed(2)), // Ensure correct type
         };
 
         try {
-          await fetch('https://ai-readiness-backend.onrender.com/api/results', {
+          const response = await fetch(backendUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
           });
-          setSubmitted(true);
+
+          if (!response.ok) {
+            let errorMsg = `Serverfout: ${response.status} ${response.statusText}`;
+            try {
+                const errData = await response.json();
+                errorMsg = `Fout: ${errData.message || errData.error || errorMsg}`;
+            } catch (e) { /* Ignore if response is not JSON */ }
+            throw new Error(errorMsg);
+          }
+
+          // Success
+          setIsSubmitted(true);
+
         } catch (err) {
           console.error('Error submitting data:', err);
+          setError(`Verzenden mislukt. ${err.message}. Controleer de verbinding en probeer het opnieuw.`);
+          setIsSubmitted(false); // Stay on form if error
+        } finally {
+          setIsLoading(false);
         }
       };
 
-      return (
-        <div className="max-w-2xl mx-auto bg-white dark:bg-zinc-800 p-6 rounded-xl shadow-lg">
-          <h2 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-white">AI Readiness Scan</h2>
-          {!submitted ? (
-            <>
-              {questions.map((q) => (
-                <div key={q.id} className="mb-4">
-                  <label className="block text-zinc-700 dark:text-zinc-200 mb-2">{q.text}</label>
-                  <select
-                    className="w-full p-2 border border-zinc-300 rounded dark:bg-zinc-700 dark:text-white"
-                    onChange={(e) => handleChange(q.id, e.target.value)}
-                  >
-                    <option value="">Kies score (1-5)</option>
-                    {[1,2,3,4,5].map(val => (
-                      <option key={val} value={val}>{val}</option>
-                    ))}
-                  </select>
-                </div>
-              ))}
+      const handleReset = () => {
+        setAnswers({});
+        setEmail('');
+        setIsSubmitted(false);
+        setError(null);
+        setAverageScore(0);
+        setFeedback({ text: '', color: '' });
+        // Scroll back to top might be useful
+        window.scrollTo(0, 0);
+      };
 
-              <div className="mb-4">
-                <label className="block text-zinc-700 dark:text-zinc-200 mb-2">E-mailadres (optioneel)</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-2 border border-zinc-300 rounded dark:bg-zinc-700 dark:text-white"
-                  placeholder="jouw@bedrijf.nl"
-                />
-              </div>
 
-              <button
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                onClick={handleSubmit}
-              >
-                Verstuur en bekijk resultaat
-              </button>
-            </>
-          ) : (
-            <div className="text-center">
-              <p className="text-lg text-zinc-900 dark:text-white mb-2">
-                Gemiddelde score: <strong>{averageScore()}</strong>
-              </p>
-              <p className="text-zinc-700 dark:text-zinc-300">
-                {averageScore() < 2.5 && "Je organisatie is nog niet klaar voor AI, begin met een datastrategie."}
-                {averageScore() >= 2.5 && averageScore() < 4 && "Je bent op de goede weg, versterk governance en infrastructuur."}
-                {averageScore() >= 4 && "Je organisatie is AI-ready! Tijd voor pilotprojecten."}
-              </p>
-              <button
-                className="mt-4 bg-zinc-300 dark:bg-zinc-600 px-4 py-2 rounded"
-                onClick={() => setSubmitted(false)}
-              >
-                Opnieuw invullen
-              </button>
+      // --- Render Logic ---
+      if (isSubmitted) {
+        return (
+          <div className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-xl shadow-xl text-center transition-all duration-500 ease-in-out">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Scan Resultaat</h2>
+             {/* Score Display */}
+            <div className="my-8">
+                 <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">Jouw Gemiddelde Readiness Score:</p>
+                 <p className={`text-6xl font-bold ${feedback.color}`}>{averageScore.toFixed(1)} / 5</p>
             </div>
-          )}
+             {/* Feedback Text */}
+            <p className={`text-base md:text-lg ${feedback.color} mb-8 leading-relaxed`}>
+              {feedback.text}
+            </p>
+             {/* Optional: Email Confirmation */}
+            {email && (
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+                Indien een e-mailfunctie is geconfigureerd op de server, ontvang je mogelijk een kopie op {email}.
+              </p>
+            )}
+             {/* Reset Button */}
+            <button
+              className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg transition duration-300"
+              onClick={handleReset}
+            >
+              Scan Opnieuw Uitvoeren
+            </button>
+          </div>
+        );
+      }
+
+      // --- Render Form ---
+      return (
+        <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-xl transition-all duration-500 ease-in-out">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">AI Readiness Scan</h2>
+          <p className="text-center text-gray-600 dark:text-gray-300 mb-8">Beoordeel de huidige status van jouw organisatie op de volgende punten (1 = helemaal niet, 5 = volledig geïmplementeerd).</p>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Questions */}
+            {questions.map((q, index) => (
+              <fieldset key={q.id} className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <legend className="block text-base font-semibold text-gray-800 dark:text-gray-200 mb-3">{index + 1}. {q.text}</legend>
+                {/* Using Radio Buttons for better UX */}
+                <div className="flex flex-wrap gap-x-6 gap-y-3">
+                   {[1, 2, 3, 4, 5].map(val => (
+                    <label key={val} className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name={`question_${q.id}`} // Group radios by question
+                        value={val}
+                        checked={answers[q.id] === val}
+                        onChange={() => handleAnswerChange(q.id, val)}
+                        className="form-radio" // Apply custom radio style
+                        required // Ensure one option is selected per question
+                      />
+                      <span className="ml-2 text-gray-700 dark:text-gray-300">{val}</span>
+                    </label>
+                  ))}
+                 </div>
+              </fieldset>
+            ))}
+
+            {/* Email Input */}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+              <label htmlFor="email" className="block text-base font-medium text-gray-800 dark:text-gray-200 mb-2">
+                E-mailadres <span className="text-sm font-normal text-gray-500 dark:text-gray-400">(Optioneel, voor het ontvangen van de resultaten)</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={handleEmailChange}
+                className="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+                placeholder="jouw.naam@jouworganisatie.nl"
+              />
+            </div>
+
+            {/* Error Message Display */}
+            {error && (
+              <p role="alert" className="text-red-600 dark:text-red-400 text-sm text-center font-medium p-3 bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-md">{error}</p>
+            )}
+
+            {/* Submit Button */}
+            <div className="text-center pt-4">
+              <button
+                type="submit"
+                className={`bg-indigo-600 text-white font-semibold px-10 py-3 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 w-full md:w-auto ${isLoading || !isFormComplete ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-lg'}`}
+                disabled={isLoading || !isFormComplete}
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Verwerken...
+                  </span>
+                  ) : 'Verstuur en Bekijk Resultaat'}
+              </button>
+               {!isFormComplete && !error && <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">Vul a.u.b. alle vragen in om de scan te voltooien.</p>}
+            </div>
+          </form>
         </div>
       );
     }
 
+    // --- Render the component ---
     ReactDOM.render(<ReadinessScan />, document.getElementById('root'));
   </script>
 </body>
