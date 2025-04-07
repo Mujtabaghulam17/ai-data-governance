@@ -1,105 +1,291 @@
 <!DOCTYPE html>
-<!-- Default language set by JS on load -->
-<html>
+<html lang="en"> <!-- Default language -->
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Title updated by JS -->
-  <title data-translate="pageTitle">AI Readiness Scan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-translate="pageTitle">AI Data Governance - Compliance, Security & Transparency</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    /* (Keep existing styles: body transition, fadeIn, form-radio, etc.) */
-     body { transition: background-color 0.3s ease; }
-    #root > div { opacity: 0; animation: fadeIn 0.6s ease-out forwards; animation-fill-mode: forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    /* Style radio buttons better */
-    .form-radio {
-        appearance: none; border-radius: 50%; width: 1.25em; height: 1.25em;
-        border: 2px solid #6366f1; transition: 0.2s all linear; margin-right: 0.5em;
-        position: relative; top: 0.2em; cursor: pointer;
-    }
-    .form-radio:checked { border: 6px solid #6366f1; }
-    .dark .form-radio { border-color: #818cf8; }
-    .dark .form-radio:checked { border-color: #818cf8; }
-
-     /* Style for language switcher */
-     .lang-switcher { text-align: right; margin-bottom: 1rem; }
-    .lang-switcher button {
-        padding: 0.3rem 0.7rem; margin: 0 0.2rem; border: 1px solid #d1d5db; /* gray-300 */
-        border-radius: 0.25rem; transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-        background-color: white; color: #374151; /* gray-700 */
-    }
-     .dark .lang-switcher button { background-color: #374151; border-color: #4b5563; color: #e5e7eb; }
-    .lang-switcher button.active { background-color: #4f46e5; border-color: #4f46e5; color: white; font-weight: bold; }
-     .dark .lang-switcher button.active { background-color: #6366f1; border-color: #6366f1; color: white; }
-    .lang-switcher button:not(.active):hover { border-color: #6b7280; }
-     .dark .lang-switcher button:not(.active):hover { border-color: #9ca3af; }
+    /* (Keep existing styles: dialog::backdrop, fadeIn, lang-switcher etc.) */
+    dialog::backdrop { background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    section, header, footer { animation: fadeIn 0.5s ease-out forwards; opacity: 0; animation-fill-mode: forwards; }
+    header { animation-delay: 0s; } section { animation-delay: 0.1s; } footer { animation-delay: 0.2s; }
+    zapier-interfaces-chatbot-embed { --embed-popup-button-background-color: #4f46e5; --embed-popup-button-text-color: #ffffff; }
+    .lang-switcher button { padding: 0.3rem 0.7rem; margin: 0 0.2rem; border: 1px solid transparent; border-radius: 0.25rem; transition: background-color 0.2s, border-color 0.2s; }
+    .lang-switcher button.active { background-color: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.5); font-weight: bold; }
+    .lang-switcher button:not(.active):hover { background-color: rgba(255, 255, 255, 0.1); }
+    .dark .lang-switcher button.active { background-color: rgba(0, 0, 0, 0.2); border-color: rgba(255, 255, 255, 0.3); }
+    .dark .lang-switcher button:not(.active):hover { background-color: rgba(0, 0, 0, 0.1); }
   </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col items-center justify-center p-4">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans leading-relaxed">
 
-   <!-- Static Elements (Header/Nav) -->
-   <div class="w-full max-w-2xl mb-2 text-left">
-       <a href="index.html" class="text-indigo-600 dark:text-indigo-400 hover:underline" data-translate="backToHome">← Back to Home</a>
-   </div>
-
-   <!-- Language Switcher -->
-    <div class="lang-switcher w-full max-w-2xl">
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-700 text-white text-center py-10 px-6 shadow-lg relative">
+    <div class="lang-switcher absolute top-4 right-4 text-sm">
       <button data-lang="en">EN</button>
       <button data-lang="nl">NL</button>
     </div>
+    <div class="max-w-4xl mx-auto pt-8">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4" data-translate="headerTitle">AI Data Governance</h1>
+      <p class="text-xl mb-8 opacity-90" data-translate="headerSubtitle">Ensuring Compliance, Security & Transparency for AI Systems</p>
+      <button onclick="location.href='readiness.html'" class="bg-white text-indigo-600 font-semibold px-8 py-3 rounded-lg shadow hover:bg-gray-100 transition duration-300" data-translate="startScanButton">
+        Start AI Readiness Scan
+      </button>
+    </div>
+  </header>
 
+  <main class="max-w-5xl mx-auto p-6 space-y-12">
 
-  <!-- Container for React app -->
-  <div id="root" class="w-full max-w-2xl">
-      <!-- React component will be rendered here -->
-      <div class="text-center p-10 text-gray-500" data-translate="loadingReact">Loading Scan...</div>
-  </div>
+    <!-- Key Features Section -->
+    <section id="features" class="py-8">
+      <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="featuresTitle">Key Features</h2>
+      <div class="grid md:grid-cols-3 gap-6 text-center">
+        <!-- Feature cards -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+          <h3 class="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400" data-translate="featureComplianceTitle">Compliance Monitoring</h3>
+          <p data-translate="featureComplianceDesc">Automated checks against GDPR, EU AI Act, and more.</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+          <h3 class="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400" data-translate="featureBiasTitle">Bias & Drift Detection</h3>
+          <p data-translate="featureBiasDesc">Identify and mitigate fairness issues and model decay.</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+          <h3 class="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400" data-translate="featureRiskTitle">Risk Management</h3>
+          <p data-translate="featureRiskDesc">Comprehensive data security and operational risk tools.</p>
+        </div>
+      </div>
+       <p class="text-center mt-6 text-lg" data-translate="featureIntegration">Seamless Integration with ML Tools like TensorFlow, PyTorch, and Scikit-learn.</p>
+    </section>
 
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-8 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-inner px-6">
+        <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="benefitsTitle">Unlock Responsible AI Innovation</h2>
+        <p class="text-center text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-3xl mx-auto" data-translate="benefitsIntro">
+            Effective AI governance isn't just about compliance; it's about building trust, mitigating risks, and confidently deploying AI solutions that drive value.
+        </p>
+        <div class="grid md:grid-cols-3 gap-6 text-left">
+            <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400" data-translate="benefitRiskTitle">Mitigate Compliance Risks</h3>
+                <p class="text-gray-700 dark:text-gray-300" data-translate="benefitRiskDesc">Navigate complex regulations like GDPR and the EU AI Act with automated monitoring and reporting, reducing the chance of costly fines.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-3 text-green-600 dark:text-green-400" data-translate="benefitTrustTitle">Build Stakeholder Trust</h3>
+                <p class="text-gray-700 dark:text-gray-300" data-translate="benefitTrustDesc">Ensure transparency in your AI operations. Demonstrate fairness, security, and ethical considerations to customers, partners, and regulators.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-3 text-purple-600 dark:text-purple-400" data-translate="benefitInnovationTitle">Accelerate Innovation Safely</h3>
+                <p class="text-gray-700 dark:text-gray-300" data-translate="benefitInnovationDesc">Deploy AI models faster and with confidence. Proactive governance removes roadblocks and ensures your innovations are robust and responsible.</p>
+            </div>
+        </div>
+    </section>
 
-  <!-- Core JS: Translations and Language Logic (Outside React) -->
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-8"> <!-- Note: Removed background class here as intended previously -->
+      <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="pricingTitle">Flexible Pricing Plans</h2>
+      <div class="flex flex-wrap justify-center gap-4">
+          <!-- Pricing buttons -->
+        <button onclick="openModal('starterModal')" class="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow hover:bg-indigo-700 transition duration-300" data-translate="pricingStarter">Starter - $49/mo</button>
+        <button onclick="openModal('professionalModal')" class="bg-purple-600 text-white px-6 py-3 rounded-lg shadow hover:bg-purple-700 transition duration-300" data-translate="pricingProfessional">Professional - $199/mo</button>
+        <button onclick="openModal('enterpriseModal')" class="bg-gray-700 text-white px-6 py-3 rounded-lg shadow hover:bg-gray-800 transition duration-300" data-translate="pricingEnterprise">Enterprise - Contact Us</button>
+      </div>
+    </section>
+
+    <!-- Trust & Compliance Section -->
+    <section id="trust" class="py-8 text-center">
+      <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white" data-translate="trustTitle">Trust & Compliance Standards</h2>
+      <p class="max-w-2xl mx-auto text-lg" data-translate="trustDesc">
+        Our platform helps you align with major regulations and standards like GDPR, the EU AI Act, and ISO 27001, fostering trust through responsible AI practices.
+      </p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-8 bg-white dark:bg-gray-800 rounded-lg shadow-md px-8">
+       <!-- Contact form -->
+       <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="contactTitle">Get In Touch</h2>
+      <form id="contact-form" class="max-w-xl mx-auto space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-translate="contactNameLabel">Name:</label>
+          <input type="text" id="name" name="name" required class="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-translate="contactEmailLabel">Email:</label>
+          <input type="email" id="email" name="email" required class="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-translate="contactMessageLabel">Message:</label>
+          <textarea id="message" name="message" rows="5" required class="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-lg shadow hover:bg-green-700 transition duration-300" data-translate="contactSendButton">Send Message</button>
+        </div>
+        <p id="form-status" class="text-center mt-4 text-green-600 dark:text-green-400 hidden" data-translate-dynamic="formStatus"></p>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 dark:bg-black text-gray-400 dark:text-gray-500 text-center py-6 mt-12">
+     <!-- Footer content -->
+     <p data-translate="footerRights">© 2024 AI Data Governance. All rights reserved.</p>
+  </footer>
+
+  <!-- Modals -->
+   <dialog id="starterModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400" data-translate="modalStarterTitle">Starter Plan - $49/month</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalStarterDesc">Perfect for small teams getting started:</p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
+        <li data-translate="modalStarterFeat1">Automated compliance alerts</li>
+        <li data-translate="modalStarterFeat2">Basic risk reports</li>
+        <li data-translate="modalStarterFeat3">Up to 2 AI models</li>
+        </ul>
+        <button onclick="closeModal('starterModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
+    </dialog>
+
+    <dialog id="professionalModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-4 text-purple-600 dark:text-purple-400" data-translate="modalProfTitle">Professional Plan - $199/month</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalProfDesc">For growing teams needing deeper controls:</p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
+        <li data-translate="modalProfFeat1">Advanced drift detection</li>
+        <li data-translate="modalProfFeat2">Data lineage tracking</li>
+        <li data-translate="modalProfFeat3">Regulatory audit dashboard</li>
+        <li data-translate="modalProfFeat4">Up to 10 AI models</li>
+        </ul>
+        <button onclick="closeModal('professionalModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
+    </dialog>
+
+    <dialog id="enterpriseModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-4 text-gray-700 dark:text-gray-300" data-translate="modalEntTitle">Enterprise Plan - Contact Us</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalEntDesc">Tailored for complex, large-scale AI operations:</p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
+        <li data-translate="modalEntFeat1">Custom compliance frameworks</li>
+        <li data-translate="modalEntFeat2">Dedicated support & SLA</li>
+        <li data-translate="modalEntFeat3">On-premise or hybrid deployment</li>
+        <li data-translate="modalEntFeat4">Unlimited models</li>
+        </ul>
+        <button onclick="closeModal('enterpriseModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
+    </dialog>
+
+  <!-- Zapier Chatbot -->
+  <script async type="module" src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js"></script>
+  <zapier-interfaces-chatbot-embed is-popup="true" chatbot-id="cm8i6dnmz0019s3ik7xurhthg"></zapier-interfaces-chatbot-embed>
+
   <script>
     // --- Translations Object (Keep as is from previous correct version) ---
     const translations = {
-        en: {
-            pageTitle: "AI Readiness Scan", backToHome: "\u2190 Back to Home", loadingReact: "Loading Scan...",
-            scanTitle: "AI Readiness Scan", scanIntro: "Assess your organization's current status on the following points (1 = not at all, 5 = fully implemented).",
-            q1: "Does your organization have a clear, documented AI strategy defined?", q2: "Does your organization have sufficient quality, accessible, and relevant data for AI?",
-            q3: "Is the IT infrastructure (compute power, storage, network) scalable and suitable for AI workloads?", q4: "Are AI initiatives proactively assessed for compliance (e.g., GDPR, AI Act) and ethical guidelines?",
-            q5: "Are sufficient AI skills (data science, ML engineering, domain expertise) available or attainable?", scoreScale: "(1 = not at all, 5 = fully implemented)",
-            emailLabel: "Email Address", emailOptional: "(Optional, to receive results)", emailPlaceholder: "your.name@yourcompany.com",
-            submitButton: "Submit and View Results", submittingButton: "Processing...", formIncompleteError: "Please answer all questions with a score from 1 to 5.",
-            submitGeneralError: "Submission failed. {error}. Check connection and try again.", fillAllPrompt: "Please answer all questions to complete the scan.",
-            resultsTitle: "Scan Result", resultsAverageLabel: "Your Average Readiness Score:", resultsScoreUnit: "/ 5",
-            feedbackLow: "Laying the Foundation: Your organization is at the beginning. Focus on developing a clear AI vision and data strategy.",
-            feedbackMid: "Good Progress: There's potential! Strengthen governance, invest in infrastructure, and develop necessary skills.",
-            feedbackHigh: "Ready for Action: Excellent foundation! Your organization is ready to scale AI initiatives and pilot projects.",
-            resultsEmailConfirm: "If an email function is configured on the server, you may receive a copy at {email}.", resultsResetButton: "Run Scan Again"
-        },
-        nl: {
-            pageTitle: "AI Gereedheidsscan", backToHome: "\u2190 Terug naar Home", loadingReact: "Scan laden...",
-            scanTitle: "AI Gereedheidsscan", scanIntro: "Beoordeel de huidige status van jouw organisatie op de volgende punten (1 = helemaal niet, 5 = volledig geïmplementeerd).",
-            q1: "Heeft jouw organisatie een duidelijke, gedocumenteerde AI-strategie vastgelegd?", q2: "Beschikt jouw organisatie over voldoende kwalitatieve, toegankelijke en relevante data voor AI?",
-            q3: "Is de IT-infrastructuur (rekenkracht, opslag, netwerk) schaalbaar en geschikt voor AI-workloads?", q4: "Worden AI-initiatieven proactief beoordeeld op compliance (bv. GDPR, AI Act) en ethische richtlijnen?",
-            q5: "Zijn er voldoende AI-vaardigheden (data science, ML engineering, domeinexpertise) aanwezig of in te huren?", scoreScale: "(1 = helemaal niet, 5 = volledig geïmplementeerd)",
-            emailLabel: "E-mailadres", emailOptional: "(Optioneel, voor het ontvangen van de resultaten)", emailPlaceholder: "jouw.naam@jouworganisatie.nl",
-            submitButton: "Verstuur en Bekijk Resultaat", submittingButton: "Verwerken...", formIncompleteError: "Vul a.u.b. alle vragen in met een score van 1 tot 5.",
-            submitGeneralError: "Verzenden mislukt. {error}. Controleer de verbinding en probeer het opnieuw.", fillAllPrompt: "Vul a.u.b. alle vragen in om de scan te voltooien.",
-            resultsTitle: "Scan Resultaat", resultsAverageLabel: "Jouw Gemiddelde Readiness Score:", resultsScoreUnit: "/ 5",
-            feedbackLow: "Basis leggen: Je organisatie staat aan het begin. Focus op het ontwikkelen van een duidelijke AI-visie en datastrategie.",
-            feedbackMid: "Goed op weg: Er is potentieel! Versterk governance, investeer in infrastructuur en ontwikkel benodigde vaardigheden.",
-            feedbackHigh: "Klaar voor actie: Uitstekende basis! Je organisatie is klaar om AI-initiatieven en pilotprojecten op te schalen.",
-            resultsEmailConfirm: "Indien een e-mailfunctie is geconfigureerd op de server, ontvang je mogelijk een kopie op {email}.", resultsResetButton: "Scan Opnieuw Uitvoeren"
-        }
+      en: {
+        pageTitle: "AI Data Governance - Compliance, Security & Transparency",
+        headerTitle: "AI Data Governance",
+        headerSubtitle: "Ensuring Compliance, Security & Transparency for AI Systems",
+        startScanButton: "Start AI Readiness Scan",
+        featuresTitle: "Key Features",
+        featureComplianceTitle: "Compliance Monitoring",
+        featureComplianceDesc: "Automated checks against GDPR, EU AI Act, and more.",
+        featureBiasTitle: "Bias & Drift Detection",
+        featureBiasDesc: "Identify and mitigate fairness issues and model decay.",
+        featureRiskTitle: "Risk Management",
+        featureRiskDesc: "Comprehensive data security and operational risk tools.",
+        featureIntegration: "Seamless Integration with ML Tools like TensorFlow, PyTorch, and Scikit-learn.",
+        benefitsTitle: "Unlock Responsible AI Innovation",
+        benefitsIntro: "Effective AI governance isn't just about compliance; it's about building trust, mitigating risks, and confidently deploying AI solutions that drive value.",
+        benefitRiskTitle: "Mitigate Compliance Risks",
+        benefitRiskDesc: "Navigate complex regulations like GDPR and the EU AI Act with automated monitoring and reporting, reducing the chance of costly fines.",
+        benefitTrustTitle: "Build Stakeholder Trust",
+        benefitTrustDesc: "Ensure transparency in your AI operations. Demonstrate fairness, security, and ethical considerations to customers, partners, and regulators.",
+        benefitInnovationTitle: "Accelerate Innovation Safely",
+        benefitInnovationDesc: "Deploy AI models faster and with confidence. Proactive governance removes roadblocks and ensures your innovations are robust and responsible.",
+        pricingTitle: "Flexible Pricing Plans",
+        pricingStarter: "Starter - $49/mo",
+        pricingProfessional: "Professional - $199/mo",
+        pricingEnterprise: "Enterprise - Contact Us",
+        trustTitle: "Trust & Compliance Standards",
+        trustDesc: "Our platform helps you align with major regulations and standards like GDPR, the EU AI Act, and ISO 27001, fostering trust through responsible AI practices.",
+        contactTitle: "Get In Touch",
+        contactNameLabel: "Name:",
+        contactEmailLabel: "Email:",
+        contactMessageLabel: "Message:",
+        contactSendButton: "Send Message",
+        formStatusSuccess: "Thank you! Your message has been sent. We'll get back to you soon.",
+        footerRights: "© 2024 AI Data Governance. All rights reserved.",
+        modalStarterTitle: "Starter Plan - $49/month",
+        modalStarterDesc: "Perfect for small teams getting started:",
+        modalStarterFeat1: "Automated compliance alerts",
+        modalStarterFeat2: "Basic risk reports",
+        modalStarterFeat3: "Up to 2 AI models",
+        modalProfTitle: "Professional Plan - $199/month",
+        modalProfDesc: "For growing teams needing deeper controls:",
+        modalProfFeat1: "Advanced drift detection",
+        modalProfFeat2: "Data lineage tracking",
+        modalProfFeat3: "Regulatory audit dashboard",
+        modalProfFeat4: "Up to 10 AI models",
+        modalEntTitle: "Enterprise Plan - Contact Us",
+        modalEntDesc: "Tailored for complex, large-scale AI operations:",
+        modalEntFeat1: "Custom compliance frameworks",
+        modalEntFeat2: "Dedicated support & SLA",
+        modalEntFeat3: "On-premise or hybrid deployment",
+        modalEntFeat4: "Unlimited models",
+        modalCloseButton: "Close"
+      },
+      nl: {
+        pageTitle: "AI Data Governance - Naleving, Beveiliging & Transparantie",
+        headerTitle: "AI Data Governance",
+        headerSubtitle: "Zorgen voor Naleving, Beveiliging & Transparantie voor AI-systemen",
+        startScanButton: "Start AI Gereedheidsscan",
+        featuresTitle: "Belangrijkste Functies",
+        featureComplianceTitle: "Nalevingsmonitoring",
+        featureComplianceDesc: "Geautomatiseerde controles tegen AVG, EU AI Act en meer.",
+        featureBiasTitle: "Bias- & Drift-detectie",
+        featureBiasDesc: "Identificeer en verminder eerlijkheidsproblemen en modelverval.",
+        featureRiskTitle: "Risicobeheer",
+        featureRiskDesc: "Uitgebreide tools voor gegevensbeveiliging en operationele risico's.",
+        featureIntegration: "Naadloze integratie met ML-tools zoals TensorFlow, PyTorch en Scikit-learn.",
+        benefitsTitle: "Ontsluit Verantwoorde AI Innovatie",
+        benefitsIntro: "Effectieve AI governance gaat niet alleen over naleving; het gaat om het opbouwen van vertrouwen, het beperken van risico's en het vol vertrouwen implementeren van AI-oplossingen die waarde toevoegen.",
+        benefitRiskTitle: "Beperk Nalevingsrisico's",
+        benefitRiskDesc: "Navigeer complexe regelgeving zoals AVG en de EU AI Act met geautomatiseerde monitoring en rapportage, waardoor de kans op kostbare boetes wordt verkleind.",
+        benefitTrustTitle: "Bouw Vertrouwen bij Belanghebbenden",
+        benefitTrustDesc: "Zorg voor transparantie in uw AI-activiteiten. Toon eerlijkheid, veiligheid en ethische overwegingen aan klanten, partners en toezichthouders.",
+        benefitInnovationTitle: "Versnel Innovatie Veilig",
+        benefitInnovationDesc: "Implementeer AI-modellen sneller en met vertrouwen. Proactieve governance verwijdert obstakels en zorgt ervoor dat uw innovaties robuust en verantwoordelijk zijn.",
+        pricingTitle: "Flexibele Prijsplannen",
+        pricingStarter: "Starter - €49/maand",
+        pricingProfessional: "Professional - €199/maand",
+        pricingEnterprise: "Enterprise - Neem contact op",
+        trustTitle: "Vertrouwen & Nalevingsnormen",
+        trustDesc: "Ons platform helpt u aan te sluiten bij belangrijke regelgeving en normen zoals AVG, de EU AI Act en ISO 27001, en bevordert vertrouwen door verantwoorde AI-praktijken.",
+        contactTitle: "Neem Contact Op",
+        contactNameLabel: "Naam:",
+        contactEmailLabel: "E-mail:",
+        contactMessageLabel: "Bericht:",
+        contactSendButton: "Verstuur Bericht",
+        formStatusSuccess: "Dank u! Uw bericht is verzonden. We nemen spoedig contact met u op.",
+        footerRights: "© 2024 AI Data Governance. Alle rechten voorbehouden.",
+        modalStarterTitle: "Starter Plan - €49/maand",
+        modalStarterDesc: "Perfect voor kleine teams die beginnen:",
+        modalStarterFeat1: "Geautomatiseerde nalevingsmeldingen",
+        modalStarterFeat2: "Basis risicorapporten",
+        modalStarterFeat3: "Tot 2 AI-modellen",
+        modalProfTitle: "Professional Plan - €199/maand",
+        modalProfDesc: "Voor groeiende teams die diepere controle nodig hebben:",
+        modalProfFeat1: "Geavanceerde drift-detectie",
+        modalProfFeat2: "Data lineage tracking",
+        modalProfFeat3: "Regelgevend audit dashboard",
+        modalProfFeat4: "Tot 10 AI-modellen",
+        modalEntTitle: "Enterprise Plan - Neem contact op",
+        modalEntDesc: "Op maat gemaakt voor complexe, grootschalige AI-operaties:",
+        modalEntFeat1: "Aangepaste nalevingskaders",
+        modalEntFeat2: "Toegewijde ondersteuning & SLA",
+        modalEntFeat3: "On-premise of hybride implementatie",
+        modalEntFeat4: "Onbeperkt aantal modellen",
+        modalCloseButton: "Sluiten"
+      }
     };
 
     // --- Language Switching Logic (Keep as is) ---
-    const defaultLang = 'nl';
+    const defaultLang = 'en';
     let currentLang = localStorage.getItem('language') || defaultLang;
-    const rootElement = document.getElementById('root');
     function setLanguage(lang) {
         if (!translations[lang]) { lang = defaultLang; }
         currentLang = lang;
@@ -108,168 +294,56 @@
         document.querySelectorAll('[data-translate]').forEach(element => {
             const key = element.getAttribute('data-translate');
             const translation = translations[lang][key] || translations[defaultLang][key];
-             if (translation !== undefined) {
-                 if (key === 'backToHome') { element.innerHTML = translation; }
-                 else { element.innerText = translation; }
+            if (translation !== undefined) {
+                if (key === 'footerRights') { element.innerHTML = translation; }
+                else { element.innerText = translation; }
             } else { console.warn(`Translation key "${key}" not found.`); }
         });
+        updateDynamicPlaceholders(lang);
         document.querySelectorAll('.lang-switcher button').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
         });
-        renderReactApp(lang); // Re-render React component
     }
+    function updateDynamicPlaceholders(lang) { /* Handle static placeholders if any */ }
     document.querySelectorAll('.lang-switcher button').forEach(button => {
       button.addEventListener('click', () => { setLanguage(button.getAttribute('data-lang')); });
     });
 
-    // --- Function to Render React App (Fix inside JSX String) ---
-    function renderReactApp(lang) {
-        if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined' && typeof Babel !== 'undefined') {
-             try {
-                const jsxCode = `
-                    const componentTranslations = translations;
-                    const currentLang = '${lang}';
-                    const { useState, useEffect } = React;
-
-                    const questions = [ { id: 1, text: "" }, { id: 2, text: "" }, { id: 3, text: "" }, { id: 4, text: "" }, { id: 5, text: "" } ]; // Structure only
-                    const backendUrl = 'https://ai-readiness-backend.onrender.com/api/results';
-
-                    const calculateAverageScore = (answers) => {
-                         const values = Object.values(answers);
-                         if (values.length === 0) return 0;
-                         const total = values.reduce((acc, val) => acc + (parseInt(val, 10) || 0), 0);
-                         return values.length > 0 ? (total / values.length) : 0;
-                    };
-
-                    const getFeedbackMessage = (score, lang) => {
-                        const t = componentTranslations[lang] || componentTranslations['${defaultLang}'];
-                        if (score < 2.5) return { text: t.feedbackLow, color: "text-red-600 dark:text-red-400" };
-                        if (score >= 2.5 && score < 4) return { text: t.feedbackMid, color: "text-yellow-600 dark:text-yellow-400" };
-                        return { text: t.feedbackHigh, color: "text-green-600 dark:text-green-400" };
-                    };
-
-                    function ReadinessScan(props) {
-                        const { language, translations } = props;
-                        const t = translations[language] || translations['${defaultLang}'];
-                        const questionTextKeys = { 1: 'q1', 2: 'q2', 3: 'q3', 4: 'q4', 5: 'q5' };
-                        const translatedQuestions = questions.map(q => ({ ...q, text: t[questionTextKeys[q.id]] || \`Question \${q.id} text missing\` }));
-
-                        const [answers, setAnswers] = useState({});
-                        const [email, setEmail] = useState('');
-                        const [isSubmitted, setIsSubmitted] = useState(false);
-                        const [isLoading, setIsLoading] = useState(false);
-                        const [error, setError] = useState(null);
-                        const [averageScore, setAverageScore] = useState(0);
-                        const [feedback, setFeedback] = useState({ text: '', color: '' });
-                        const isFormComplete = Object.keys(answers).length === translatedQuestions.length && Object.values(answers).every(val => val >= 1 && val <= 5);
-
-                        useEffect(() => {
-                            const newScore = calculateAverageScore(answers);
-                            setAverageScore(newScore);
-                            if (isSubmitted) { setFeedback(getFeedbackMessage(newScore, language)); }
-                        }, [answers, isSubmitted, language]);
-
-                        const handleAnswerChange = (id, value) => { setAnswers(prev => ({ ...prev, [id]: parseInt(value, 10) })); setError(null); };
-                        const handleEmailChange = (e) => { setEmail(e.target.value); };
-                        const handleReset = () => { setAnswers({}); setEmail(''); setIsSubmitted(false); setError(null); setAverageScore(0); setFeedback({ text: '', color: '' }); window.scrollTo(0, 0); };
-
-                        const handleSubmit = async (event) => {
-                            event.preventDefault();
-                            if (!isFormComplete) { setError(t.formIncompleteError); return; }
-                            setError(null); setIsLoading(true);
-                            const finalScore = calculateAverageScore(answers); setAverageScore(finalScore); setFeedback(getFeedbackMessage(finalScore, language));
-                            const payload = { email: email.trim() || null, answers, average: parseFloat(finalScore.toFixed(2)) };
-                            try {
-                               const response = await fetch(backendUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                                if (!response.ok) { let errorMsg = \`Server error: \${response.status}\`; try { const errData = await response.json(); errorMsg = \`Error: \${errData.message || errData.error || errorMsg}\`; } catch (e) {} throw new Error(errorMsg); }
-                                setIsSubmitted(true);
-                            } catch (err) { console.error('Error submitting data:', err); setError(t.submitGeneralError.replace('{error}', err.message)); setIsSubmitted(false); }
-                            finally { setIsLoading(false); }
-                        };
-
-                        if (isSubmitted) { /* ... Results view JSX (keep as is) ... */
-                            return (
-                                <div className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-xl shadow-xl text-center">
-                                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">{t.resultsTitle}</h2>
-                                <div className="my-8">
-                                    <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">{t.resultsAverageLabel}</p>
-                                    <p className={\`text-6xl font-bold \${feedback.color}\`}>{averageScore.toFixed(1)} {t.resultsScoreUnit}</p>
-                                </div>
-                                <p className={\`text-base md:text-lg \${feedback.color} mb-8 leading-relaxed\`}>{feedback.text}</p>
-                                {email && (<p className="text-sm text-gray-500 dark:text-gray-400 mb-8">{t.resultsEmailConfirm.replace('{email}', email)}</p>)}
-                                <button className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg" onClick={handleReset}>
-                                    {t.resultsResetButton}
-                                </button>
-                                </div>
-                            );
-                        }
-
-                        // --- Form View JSX (FIX IS HERE) ---
-                        return (
-                             <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-xl">
-                                <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">{t.scanTitle}</h2>
-                                <p className="text-center text-gray-600 dark:text-gray-300 mb-8">{t.scanIntro}</p>
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    {translatedQuestions.map((q, index) => (
-                                        <fieldset key={q.id} className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                                            <legend className="block text-base font-semibold text-gray-800 dark:text-gray-200 mb-3">{index + 1}. {q.text}</legend>
-                                            <div className="flex flex-wrap gap-x-6 gap-y-3">
-                                                {/* **** CORRECTED PART START **** */}
-                                                {[1, 2, 3, 4, 5].map(val => (
-                                                    <label key={val} className="inline-flex items-center cursor-pointer">
-                                                        <input
-                                                            type="radio"
-                                                            name={\`question_\${q.id}\`}
-                                                            value={val}
-                                                            checked={answers[q.id] === val}
-                                                            onChange={() => handleAnswerChange(q.id, val)}
-                                                            className="form-radio"
-                                                            required
-                                                        />
-                                                        <span className="ml-2 text-gray-700 dark:text-gray-300">{val}</span>
-                                                    </label>
-                                                ))}
-                                                {/* **** CORRECTED PART END **** */}
-                                            </div>
-                                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{t.scoreScale}</p>
-                                        </fieldset>
-                                    ))}
-                                    {/* ... Email Input, Error, Submit Button JSX (keep as is) ... */}
-                                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                                        <label htmlFor="email" className="block text-base font-medium text-gray-800 dark:text-gray-200 mb-2">
-                                            {t.emailLabel} <span className="text-sm font-normal text-gray-500 dark:text-gray-400">{t.emailOptional}</span>
-                                        </label>
-                                        <input type="email" id="email" value={email} onChange={handleEmailChange} className="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500" placeholder={t.emailPlaceholder} />
-                                    </div>
-                                    {error && ( <p role="alert" className="text-red-600 dark:text-red-400 text-sm text-center font-medium p-3 bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-md">{error}</p> )}
-                                    <div className="text-center pt-4">
-                                        <button type="submit" className={\`bg-indigo-600 text-white font-semibold px-10 py-3 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 w-full md:w-auto \${isLoading || !isFormComplete ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-lg'}\`} disabled={isLoading || !isFormComplete}>
-                                            {isLoading ? ( <span className="flex items-center justify-center"><svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> {t.submittingButton}</span> ) : t.submitButton}
-                                        </button>
-                                        {!isFormComplete && !error && <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">{t.fillAllPrompt}</p>}
-                                    </div>
-                                </form>
-                            </div>
-                        );
-                    }
-
-                    ReactDOM.render( <ReadinessScan language={'${lang}'} translations={componentTranslations} />, document.getElementById('root') );
-                `;
-                 const transformedCode = Babel.transform(jsxCode, { presets: ['react'] }).code;
-                 new Function(transformedCode)(); // Safer execution
-             } catch (error) {
-                  console.error("Error rendering React component:", error);
-                  rootElement.innerHTML = \`<div class="text-center p-10 text-red-500">Error loading scan component. \${error.message}</div>\`; // Show error message in UI
-             }
-        } else {
-             console.error("React, ReactDOM, or Babel not loaded.");
-             rootElement.innerHTML = '<div class="text-center p-10 text-red-500">Core libraries not loaded. Cannot display scan.</div>';
-        }
+    // --- Existing Functions (Modals, Form Handling - Keep as is) ---
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal && typeof modal.showModal === 'function') { modal.showModal(); }
+      else { console.error("Modal not found or showModal is not supported:", modalId); }
     }
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+       if (modal && typeof modal.close === 'function') { modal.close(); }
+       else { console.error("Modal not found or close is not supported:", modalId); }
+    }
+    document.querySelectorAll('dialog').forEach(dialog => {
+      dialog.addEventListener('click', (event) => {
+        const rect = dialog.getBoundingClientRect();
+        const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+        if (!isInDialog) { dialog.close(); }
+      });
+    });
+    const contactForm = document.getElementById("contact-form");
+    const formStatus = document.getElementById("form-status");
+    if (contactForm && formStatus) {
+        contactForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            formStatus.textContent = translations[currentLang].formStatusSuccess || translations[defaultLang].formStatusSuccess;
+            formStatus.classList.remove('hidden');
+            formStatus.classList.remove('text-red-600');
+            formStatus.classList.add('text-green-600', 'dark:text-green-400');
+            this.reset();
+            setTimeout(() => { formStatus.classList.add('hidden'); formStatus.textContent = ''; }, 5000);
+        });
+    } else { console.error("Contact form or status element not found"); }
 
     // --- Initial Load ---
     document.addEventListener("DOMContentLoaded", () => {
-      setLanguage(currentLang); // Apply initial language and render React app
+      setLanguage(currentLang); // Apply initial language
     });
   </script>
 
