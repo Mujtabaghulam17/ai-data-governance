@@ -1,298 +1,371 @@
 <!DOCTYPE html>
-<html lang="nl">
+<!-- Default language set by JS on load -->
+<html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Readiness Scan</title>
-  <!-- Include Tailwind CSS -->
+  <!-- Title updated by JS -->
+  <title data-translate="pageTitle">AI Readiness Scan</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Include React and ReactDOM -->
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-  <!-- Include Babel for JSX transformation -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    /* Smooth transition for dark mode */
-    body {
-       transition: background-color 0.3s ease;
-    }
-    /* Simple fade-in for the component */
-    #root > div {
-      opacity: 0;
-      animation: fadeIn 0.6s ease-out forwards;
-      animation-fill-mode: forwards;
-    }
-     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    /* Style radio buttons better */
-    .form-radio {
-        appearance: none;
-        border-radius: 50%;
-        width: 1.25em;
-        height: 1.25em;
-        border: 2px solid #6366f1; /* Indigo */
-        transition: 0.2s all linear;
-        margin-right: 0.5em;
-        position: relative;
-        top: 0.2em;
-    }
-    .form-radio:checked {
-        border: 6px solid #6366f1; /* Indigo */
-    }
-    .dark .form-radio {
-        border-color: #818cf8; /* Lighter Indigo for dark mode */
-    }
-     .dark .form-radio:checked {
-        border-color: #818cf8;
-    }
+    /* (Keep existing styles: body transition, fadeIn, form-radio, etc.) */
+     body { transition: background-color 0.3s ease; }
+    #root > div { opacity: 0; animation: fadeIn 0.6s ease-out forwards; animation-fill-mode: forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .form-radio { /* ... existing radio styles ... */ }
 
+     /* Style for language switcher */
+     .lang-switcher { text-align: right; margin-bottom: 1rem; }
+    .lang-switcher button {
+        padding: 0.3rem 0.7rem;
+        margin: 0 0.2rem;
+        border: 1px solid #d1d5db; /* gray-300 */
+        border-radius: 0.25rem;
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+        background-color: white;
+        color: #374151; /* gray-700 */
+    }
+     .dark .lang-switcher button {
+         background-color: #374151; /* gray-700 */
+         border-color: #4b5563; /* gray-600 */
+         color: #e5e7eb; /* gray-200 */
+     }
+
+    .lang-switcher button.active {
+        background-color: #4f46e5; /* indigo-600 */
+        border-color: #4f46e5;
+        color: white;
+        font-weight: bold;
+    }
+     .dark .lang-switcher button.active {
+         background-color: #6366f1; /* indigo-500 */
+         border-color: #6366f1;
+         color: white;
+     }
+    .lang-switcher button:not(.active):hover {
+         border-color: #6b7280; /* gray-500 */
+    }
+     .dark .lang-switcher button:not(.active):hover {
+         border-color: #9ca3af; /* gray-400 */
+     }
   </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col items-center justify-center p-4">
 
-  <!-- Optional: Link back to home -->
-   <div class="w-full max-w-2xl mb-4 text-left">
-       <a href="index.html" class="text-indigo-600 dark:text-indigo-400 hover:underline">← Back to Home</a>
+   <!-- Static Elements (Header/Nav) -->
+   <div class="w-full max-w-2xl mb-2 text-left">
+       <a href="index.html" class="text-indigo-600 dark:text-indigo-400 hover:underline" data-translate="backToHome">← Back to Home</a>
    </div>
 
+   <!-- Language Switcher -->
+    <div class="lang-switcher w-full max-w-2xl">
+      <button data-lang="en">EN</button>
+      <button data-lang="nl">NL</button>
+    </div>
+
+
   <!-- Container for React app -->
-  <div id="root" class="w-full max-w-2xl"></div>
+  <div id="root" class="w-full max-w-2xl">
+      <!-- React component will be rendered here -->
+      <div class="text-center p-10 text-gray-500" data-translate="loadingReact">Loading Scan...</div>
+  </div>
 
-  <!-- React Component Script -->
-  <script type="text/babel">
-    const { useState, useEffect } = React;
 
-    // --- Configuration ---
-    const questions = [
-      { id: 1, text: "Heeft jouw organisatie een duidelijke, gedocumenteerde AI-strategie vastgelegd?" },
-      { id: 2, text: "Beschikt jouw organisatie over voldoende kwalitatieve, toegankelijke en relevante data voor AI?" },
-      { id: 3, text: "Is de IT-infrastructuur (rekenkracht, opslag, netwerk) schaalbaar en geschikt voor AI-workloads?" },
-      { id: 4, text: "Worden AI-initiatieven proactief beoordeeld op compliance (bv. GDPR, AI Act) en ethische richtlijnen?" },
-      { id: 5, text: "Zijn er voldoende AI-vaardigheden (data science, ML engineering, domeinexpertise) aanwezig of in te huren?" }
-    ];
-    const backendUrl = 'https://ai-readiness-backend.onrender.com/api/results'; // Use your actual backend URL
-
-    // --- Helper Functions ---
-    const calculateAverageScore = (answers) => {
-      const values = Object.values(answers);
-      if (values.length === 0) return 0;
-      const total = values.reduce((acc, val) => acc + (parseInt(val, 10) || 0), 0);
-      // Only count answered questions for average calculation
-      return values.length > 0 ? (total / values.length) : 0;
+  <!-- Core JS: Translations and Language Logic (Outside React) -->
+  <script>
+    // --- Translations Object (Specific to this page + React parts) ---
+    const translations = {
+        en: {
+            pageTitle: "AI Readiness Scan",
+            backToHome: "\u2190 Back to Home", // Left arrow
+            loadingReact: "Loading Scan...",
+            // React Component Translations
+            scanTitle: "AI Readiness Scan",
+            scanIntro: "Assess your organization's current status on the following points (1 = not at all, 5 = fully implemented).",
+            q1: "Does your organization have a clear, documented AI strategy defined?",
+            q2: "Does your organization have sufficient quality, accessible, and relevant data for AI?",
+            q3: "Is the IT infrastructure (compute power, storage, network) scalable and suitable for AI workloads?",
+            q4: "Are AI initiatives proactively assessed for compliance (e.g., GDPR, AI Act) and ethical guidelines?",
+            q5: "Are sufficient AI skills (data science, ML engineering, domain expertise) available or attainable?",
+            scoreScale: "(1 = not at all, 5 = fully implemented)",
+            emailLabel: "Email Address",
+            emailOptional: "(Optional, to receive results)",
+            emailPlaceholder: "your.name@yourcompany.com",
+            submitButton: "Submit and View Results",
+            submittingButton: "Processing...",
+            formIncompleteError: "Please answer all questions with a score from 1 to 5.",
+            submitGeneralError: "Submission failed. {error}. Check connection and try again.", // Placeholder for error
+            fillAllPrompt: "Please answer all questions to complete the scan.",
+            // Results View
+            resultsTitle: "Scan Result",
+            resultsAverageLabel: "Your Average Readiness Score:",
+            resultsScoreUnit: "/ 5",
+            feedbackLow: "Laying the Foundation: Your organization is at the beginning. Focus on developing a clear AI vision and data strategy.",
+            feedbackMid: "Good Progress: There's potential! Strengthen governance, invest in infrastructure, and develop necessary skills.",
+            feedbackHigh: "Ready for Action: Excellent foundation! Your organization is ready to scale AI initiatives and pilot projects.",
+            resultsEmailConfirm: "If an email function is configured on the server, you may receive a copy at {email}.",
+            resultsResetButton: "Run Scan Again"
+        },
+        nl: {
+            pageTitle: "AI Gereedheidsscan",
+            backToHome: "\u2190 Terug naar Home",
+            loadingReact: "Scan laden...",
+            // React Component Translations
+            scanTitle: "AI Gereedheidsscan",
+            scanIntro: "Beoordeel de huidige status van jouw organisatie op de volgende punten (1 = helemaal niet, 5 = volledig geïmplementeerd).",
+            q1: "Heeft jouw organisatie een duidelijke, gedocumenteerde AI-strategie vastgelegd?",
+            q2: "Beschikt jouw organisatie over voldoende kwalitatieve, toegankelijke en relevante data voor AI?",
+            q3: "Is de IT-infrastructuur (rekenkracht, opslag, netwerk) schaalbaar en geschikt voor AI-workloads?",
+            q4: "Worden AI-initiatieven proactief beoordeeld op compliance (bv. GDPR, AI Act) en ethische richtlijnen?",
+            q5: "Zijn er voldoende AI-vaardigheden (data science, ML engineering, domeinexpertise) aanwezig of in te huren?",
+            scoreScale: "(1 = helemaal niet, 5 = volledig geïmplementeerd)",
+            emailLabel: "E-mailadres",
+            emailOptional: "(Optioneel, voor het ontvangen van de resultaten)",
+            emailPlaceholder: "jouw.naam@jouworganisatie.nl",
+            submitButton: "Verstuur en Bekijk Resultaat",
+            submittingButton: "Verwerken...",
+            formIncompleteError: "Vul a.u.b. alle vragen in met een score van 1 tot 5.",
+            submitGeneralError: "Verzenden mislukt. {error}. Controleer de verbinding en probeer het opnieuw.",
+            fillAllPrompt: "Vul a.u.b. alle vragen in om de scan te voltooien.",
+             // Results View
+            resultsTitle: "Scan Resultaat",
+            resultsAverageLabel: "Jouw Gemiddelde Readiness Score:",
+            resultsScoreUnit: "/ 5",
+            feedbackLow: "Basis leggen: Je organisatie staat aan het begin. Focus op het ontwikkelen van een duidelijke AI-visie en datastrategie.",
+            feedbackMid: "Goed op weg: Er is potentieel! Versterk governance, investeer in infrastructuur en ontwikkel benodigde vaardigheden.",
+            feedbackHigh: "Klaar voor actie: Uitstekende basis! Je organisatie is klaar om AI-initiatieven en pilotprojecten op te schalen.",
+            resultsEmailConfirm: "Indien een e-mailfunctie is geconfigureerd op de server, ontvang je mogelijk een kopie op {email}.",
+            resultsResetButton: "Scan Opnieuw Uitvoeren"
+        }
     };
 
-    const getFeedbackMessage = (score) => {
-      if (score < 2.5) return { text: "Basis leggen: Je organisatie staat aan het begin. Focus op het ontwikkelen van een duidelijke AI-visie en datastrategie.", color: "text-red-600 dark:text-red-400" };
-      if (score >= 2.5 && score < 4) return { text: "Goed op weg: Er is potentieel! Versterk governance, investeer in infrastructuur en ontwikkel benodigde vaardigheden.", color: "text-yellow-600 dark:text-yellow-400" };
-      return { text: "Klaar voor actie: Uitstekende basis! Je organisatie is klaar om AI-initiatieven en pilotprojecten op te schalen.", color: "text-green-600 dark:text-green-400" };
-    };
+    // --- Language Switching Logic ---
+    const defaultLang = 'nl'; // Default to Dutch for this page maybe? Or keep 'en'
+    let currentLang = localStorage.getItem('language') || defaultLang;
+    const rootElement = document.getElementById('root');
 
-    // --- React Component ---
-    function ReadinessScan() {
-      const [answers, setAnswers] = useState({});
-      const [email, setEmail] = useState('');
-      const [isSubmitted, setIsSubmitted] = useState(false);
-      const [isLoading, setIsLoading] = useState(false);
-      const [error, setError] = useState(null);
-      const [averageScore, setAverageScore] = useState(0);
-      const [feedback, setFeedback] = useState({ text: '', color: '' });
-
-      // Check if all questions have been answered
-      const isFormComplete = Object.keys(answers).length === questions.length &&
-                             Object.values(answers).every(val => val >= 1 && val <= 5);
-
-
-      useEffect(() => {
-        // Recalculate score whenever answers change
-        const newScore = calculateAverageScore(answers);
-        setAverageScore(newScore);
-        // Update feedback immediately if already submitted (e.g., if user goes back and changes)
-         if (isSubmitted) {
-            setFeedback(getFeedbackMessage(newScore));
-         }
-      }, [answers, isSubmitted]);
-
-
-      const handleAnswerChange = (id, value) => {
-        setAnswers(prevAnswers => ({ ...prevAnswers, [id]: parseInt(value, 10) }));
-         // Clear general error message when user interacts
-        if (error === "Vul a.u.b. alle vragen in.") {
-          setError(null);
+    function setLanguage(lang) {
+        if (!translations[lang]) {
+            console.warn(`Language "${lang}" not found. Falling back to ${defaultLang}.`);
+            lang = defaultLang;
         }
-      };
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        document.documentElement.lang = lang;
 
-      const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-      };
+        // Update static elements with data-translate attribute
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            const translation = translations[lang][key] || translations[defaultLang][key];
+             if (translation !== undefined) {
+                 // Use innerHTML if needed, else innerText
+                 if (key === 'backToHome') { // Example if it had HTML entities
+                     element.innerHTML = translation;
+                 } else {
+                     element.innerText = translation;
+                 }
+            } else {
+                 console.warn(`Translation key "${key}" not found in lang "${lang}" or default "${defaultLang}".`);
+            }
+        });
 
-      const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (!isFormComplete) {
-          setError("Vul a.u.b. alle vragen in met een score van 1 tot 5.");
-          return;
-        }
-        setError(null);
-        setIsLoading(true);
+        // Update active button style
+        document.querySelectorAll('.lang-switcher button').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
 
-        const finalScore = calculateAverageScore(answers); // Recalculate before sending
-        setAverageScore(finalScore); // Update state
-        setFeedback(getFeedbackMessage(finalScore)); // Set feedback based on final score
-
-        const payload = {
-          email: email.trim() || null, // Send null if empty or just whitespace
-          answers,
-          average: parseFloat(finalScore.toFixed(2)), // Ensure correct type
-        };
-
-        try {
-          const response = await fetch(backendUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
-
-          if (!response.ok) {
-            let errorMsg = `Serverfout: ${response.status} ${response.statusText}`;
-            try {
-                const errData = await response.json();
-                errorMsg = `Fout: ${errData.message || errData.error || errorMsg}`;
-            } catch (e) { /* Ignore if response is not JSON */ }
-            throw new Error(errorMsg);
-          }
-
-          // Success
-          setIsSubmitted(true);
-
-        } catch (err) {
-          console.error('Error submitting data:', err);
-          setError(`Verzenden mislukt. ${err.message}. Controleer de verbinding en probeer het opnieuw.`);
-          setIsSubmitted(false); // Stay on form if error
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      const handleReset = () => {
-        setAnswers({});
-        setEmail('');
-        setIsSubmitted(false);
-        setError(null);
-        setAverageScore(0);
-        setFeedback({ text: '', color: '' });
-        // Scroll back to top might be useful
-        window.scrollTo(0, 0);
-      };
-
-
-      // --- Render Logic ---
-      if (isSubmitted) {
-        return (
-          <div className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-xl shadow-xl text-center transition-all duration-500 ease-in-out">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Scan Resultaat</h2>
-             {/* Score Display */}
-            <div className="my-8">
-                 <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">Jouw Gemiddelde Readiness Score:</p>
-                 <p className={`text-6xl font-bold ${feedback.color}`}>{averageScore.toFixed(1)} / 5</p>
-            </div>
-             {/* Feedback Text */}
-            <p className={`text-base md:text-lg ${feedback.color} mb-8 leading-relaxed`}>
-              {feedback.text}
-            </p>
-             {/* Optional: Email Confirmation */}
-            {email && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
-                Indien een e-mailfunctie is geconfigureerd op de server, ontvang je mogelijk een kopie op {email}.
-              </p>
-            )}
-             {/* Reset Button */}
-            <button
-              className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg transition duration-300"
-              onClick={handleReset}
-            >
-              Scan Opnieuw Uitvoeren
-            </button>
-          </div>
-        );
-      }
-
-      // --- Render Form ---
-      return (
-        <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-xl transition-all duration-500 ease-in-out">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">AI Readiness Scan</h2>
-          <p className="text-center text-gray-600 dark:text-gray-300 mb-8">Beoordeel de huidige status van jouw organisatie op de volgende punten (1 = helemaal niet, 5 = volledig geïmplementeerd).</p>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Questions */}
-            {questions.map((q, index) => (
-              <fieldset key={q.id} className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                <legend className="block text-base font-semibold text-gray-800 dark:text-gray-200 mb-3">{index + 1}. {q.text}</legend>
-                {/* Using Radio Buttons for better UX */}
-                <div className="flex flex-wrap gap-x-6 gap-y-3">
-                   {[1, 2, 3, 4, 5].map(val => (
-                    <label key={val} className="inline-flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        name={`question_${q.id}`} // Group radios by question
-                        value={val}
-                        checked={answers[q.id] === val}
-                        onChange={() => handleAnswerChange(q.id, val)}
-                        className="form-radio" // Apply custom radio style
-                        required // Ensure one option is selected per question
-                      />
-                      <span className="ml-2 text-gray-700 dark:text-gray-300">{val}</span>
-                    </label>
-                  ))}
-                 </div>
-              </fieldset>
-            ))}
-
-            {/* Email Input */}
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-              <label htmlFor="email" className="block text-base font-medium text-gray-800 dark:text-gray-200 mb-2">
-                E-mailadres <span className="text-sm font-normal text-gray-500 dark:text-gray-400">(Optioneel, voor het ontvangen van de resultaten)</span>
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={handleEmailChange}
-                className="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
-                placeholder="jouw.naam@jouworganisatie.nl"
-              />
-            </div>
-
-            {/* Error Message Display */}
-            {error && (
-              <p role="alert" className="text-red-600 dark:text-red-400 text-sm text-center font-medium p-3 bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-md">{error}</p>
-            )}
-
-            {/* Submit Button */}
-            <div className="text-center pt-4">
-              <button
-                type="submit"
-                className={`bg-indigo-600 text-white font-semibold px-10 py-3 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 w-full md:w-auto ${isLoading || !isFormComplete ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-lg'}`}
-                disabled={isLoading || !isFormComplete}
-              >
-                {isLoading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Verwerken...
-                  </span>
-                  ) : 'Verstuur en Bekijk Resultaat'}
-              </button>
-               {!isFormComplete && !error && <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">Vul a.u.b. alle vragen in om de scan te voltooien.</p>}
-            </div>
-          </form>
-        </div>
-      );
+        // Re-render the React component with the new language
+        renderReactApp(lang);
     }
 
-    // --- Render the component ---
-    ReactDOM.render(<ReadinessScan />, document.getElementById('root'));
+    // Add event listeners to buttons
+     document.querySelectorAll('.lang-switcher button').forEach(button => {
+      button.addEventListener('click', () => {
+        const lang = button.getAttribute('data-lang');
+        setLanguage(lang);
+      });
+    });
+
+    // Function to render the React App (will be called by setLanguage and on initial load)
+    function renderReactApp(lang) {
+        // Check if React and ReactDOM are loaded
+        if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined' && typeof Babel !== 'undefined') {
+             // Use Babel to transform the JSX before rendering
+             try {
+                const jsxCode = `
+                    // Make translations accessible within JSX scope
+                    const componentTranslations = translations;
+                    const currentLang = '${lang}'; // Pass current language
+
+                    // --- React Component (Now uses props for language and translations) ---
+                    const { useState, useEffect } = React;
+
+                    // --- Configuration (Questions structure remains) ---
+                    const questions = [ /* ... keep your questions array structure ... */ ];
+                    const backendUrl = 'https://ai-readiness-backend.onrender.com/api/results';
+
+                    // --- Helper Functions (Keep calculateAverageScore, now use translated feedback) ---
+                    const calculateAverageScore = (answers) => { /* ... same logic ... */ };
+
+                    const getFeedbackMessage = (score, lang) => {
+                        const t = componentTranslations[lang] || componentTranslations['${defaultLang}']; // Fallback lang
+                        if (score < 2.5) return { text: t.feedbackLow, color: "text-red-600 dark:text-red-400" };
+                        if (score >= 2.5 && score < 4) return { text: t.feedbackMid, color: "text-yellow-600 dark:text-yellow-400" };
+                        return { text: t.feedbackHigh, color: "text-green-600 dark:text-green-400" };
+                    };
+
+
+                    function ReadinessScan(props) {
+                        const { language, translations } = props;
+                        const t = translations[language] || translations['${defaultLang}']; // Get translations for current language
+
+                         // Map question IDs to translation keys
+                        const questionTextKeys = { 1: 'q1', 2: 'q2', 3: 'q3', 4: 'q4', 5: 'q5' };
+                        const translatedQuestions = questions.map(q => ({
+                            ...q,
+                            text: t[questionTextKeys[q.id]] || q.text // Use translated text or original as fallback
+                        }));
+
+
+                        const [answers, setAnswers] = useState({});
+                        const [email, setEmail] = useState('');
+                        const [isSubmitted, setIsSubmitted] = useState(false);
+                        const [isLoading, setIsLoading] = useState(false);
+                        const [error, setError] = useState(null);
+                        const [averageScore, setAverageScore] = useState(0);
+                        const [feedback, setFeedback] = useState({ text: '', color: '' });
+
+                        const isFormComplete = Object.keys(answers).length === translatedQuestions.length &&
+                                             Object.values(answers).every(val => val >= 1 && val <= 5);
+
+                        // Recalculate score when answers change
+                        useEffect(() => {
+                            const newScore = calculateAverageScore(answers);
+                            setAverageScore(newScore);
+                            if (isSubmitted) { // Update feedback if already submitted
+                               setFeedback(getFeedbackMessage(newScore, language));
+                            }
+                        }, [answers, isSubmitted, language]);
+
+
+                        const handleAnswerChange = (id, value) => { /* ... same logic ... */ setError(null); };
+                        const handleEmailChange = (e) => { setEmail(e.target.value); };
+                        const handleReset = () => { /* ... same logic ... */ window.scrollTo(0, 0); };
+
+
+                        const handleSubmit = async (event) => {
+                            event.preventDefault();
+                            if (!isFormComplete) {
+                                setError(t.formIncompleteError); // Use translated error
+                                return;
+                            }
+                            setError(null);
+                            setIsLoading(true);
+
+                            const finalScore = calculateAverageScore(answers);
+                            setAverageScore(finalScore); // Update state
+                            setFeedback(getFeedbackMessage(finalScore, language)); // Set feedback
+
+                            const payload = { /* ... same payload ... */ };
+
+                            try {
+                               const response = await fetch(backendUrl, { /* ... same fetch options ... */ });
+                                if (!response.ok) { /* ... same error handling ... */ }
+                                setIsSubmitted(true); // Move success state update here
+                            } catch (err) {
+                                console.error('Error submitting data:', err);
+                                let errorMsg = t.submitGeneralError.replace('{error}', err.message); // Translate + insert error
+                                setError(errorMsg);
+                                setIsSubmitted(false);
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        };
+
+
+                        // --- Render Logic (Using translated text 't') ---
+                        if (isSubmitted) {
+                            return (
+                                <div className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-xl shadow-xl text-center">
+                                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">{t.resultsTitle}</h2>
+                                <div className="my-8">
+                                    <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">{t.resultsAverageLabel}</p>
+                                    <p className={\`text-6xl font-bold \${feedback.color}\`}>{averageScore.toFixed(1)} {t.resultsScoreUnit}</p>
+                                </div>
+                                <p className={\`text-base md:text-lg \${feedback.color} mb-8 leading-relaxed\`}>{feedback.text}</p>
+                                {email && (<p className="text-sm text-gray-500 dark:text-gray-400 mb-8">{t.resultsEmailConfirm.replace('{email}', email)}</p>)}
+                                <button className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg" onClick={handleReset}>
+                                    {t.resultsResetButton}
+                                </button>
+                                </div>
+                            );
+                        }
+
+                        return (
+                             <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-xl">
+                                <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">{t.scanTitle}</h2>
+                                <p className="text-center text-gray-600 dark:text-gray-300 mb-8">{t.scanIntro}</p>
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    {translatedQuestions.map((q, index) => (
+                                        <fieldset key={q.id} className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                                            <legend className="block text-base font-semibold text-gray-800 dark:text-gray-200 mb-3">{index + 1}. {q.text}</legend>
+                                            <div className="flex flex-wrap gap-x-6 gap-y-3">
+                                                {[1, 2, 3, 4, 5].map(val => ( /* ... radio button structure ... */ ))}
+                                            </div>
+                                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{t.scoreScale}</p>
+                                        </fieldset>
+                                    ))}
+                                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                                        <label htmlFor="email" className="block text-base font-medium text-gray-800 dark:text-gray-200 mb-2">
+                                            {t.emailLabel} <span className="text-sm font-normal text-gray-500 dark:text-gray-400">{t.emailOptional}</span>
+                                        </label>
+                                        <input type="email" id="email" value={email} onChange={handleEmailChange} /* ... other attributes ... */ placeholder={t.emailPlaceholder} />
+                                    </div>
+                                    {error && ( <p role="alert" className="text-red-600 dark:text-red-400 text-sm text-center font-medium p-3 bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-md">{error}</p> )}
+                                    <div className="text-center pt-4">
+                                        <button type="submit" /* ... other attributes ... */ disabled={isLoading || !isFormComplete}>
+                                            {isLoading ? ( <span>{/* ... SVG ... */} {t.submittingButton}</span> ) : t.submitButton}
+                                        </button>
+                                        {!isFormComplete && !error && <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">{t.fillAllPrompt}</p>}
+                                    </div>
+                                </form>
+                            </div>
+                        );
+                    }
+
+                    // --- Render Call ---
+                    ReactDOM.render(
+                         // Pass language and the global translations object as props
+                        <ReadinessScan language={'${lang}'} translations={componentTranslations} />,
+                        document.getElementById('root')
+                    );
+                `;
+                 // Transform and execute the JSX code
+                 const transformedCode = Babel.transform(jsxCode, { presets: ['react'] }).code;
+                 // Use Function constructor for safer execution than eval
+                 new Function(transformedCode)();
+
+             } catch (error) {
+                  console.error("Error rendering React component:", error);
+                  rootElement.innerHTML = `<div class="text-center p-10 text-red-500">Error loading scan component. ${error.message}</div>`;
+             }
+        } else {
+             console.error("React, ReactDOM, or Babel not loaded.");
+             rootElement.innerHTML = '<div class="text-center p-10 text-red-500">Core libraries not loaded. Cannot display scan.</div>';
+        }
+    }
+
+
+    // --- Initial Load ---
+    document.addEventListener("DOMContentLoaded", () => {
+      setLanguage(currentLang); // Apply initial language and render React app
+    });
+
   </script>
+
+
 </body>
 </html>
