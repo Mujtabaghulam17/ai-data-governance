@@ -3,56 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Title will be updated by JS -->
   <title data-translate="pageTitle">AI Data Governance - Compliance, Security & Transparency</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    /* (Keep existing styles: dialog::backdrop, fadeIn, etc.) */
+    /* (Keep existing styles: dialog::backdrop, fadeIn, lang-switcher etc.) */
     dialog::backdrop { background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     section, header, footer { animation: fadeIn 0.5s ease-out forwards; opacity: 0; animation-fill-mode: forwards; }
     header { animation-delay: 0s; } section { animation-delay: 0.1s; } footer { animation-delay: 0.2s; }
     zapier-interfaces-chatbot-embed { --embed-popup-button-background-color: #4f46e5; --embed-popup-button-text-color: #ffffff; }
-
-    /* Style for language switcher */
-    .lang-switcher button {
-        padding: 0.3rem 0.7rem;
-        margin: 0 0.2rem;
-        border: 1px solid transparent;
-        border-radius: 0.25rem;
-        transition: background-color 0.2s, border-color 0.2s;
-    }
-    .lang-switcher button.active {
-        background-color: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.5);
-        font-weight: bold;
-    }
-     .lang-switcher button:not(.active):hover {
-         background-color: rgba(255, 255, 255, 0.1);
-     }
-
-     /* Add styles for dark mode switcher if needed */
-     .dark .lang-switcher button.active {
-        background-color: rgba(0, 0, 0, 0.2);
-        border-color: rgba(255, 255, 255, 0.3);
-     }
-     .dark .lang-switcher button:not(.active):hover {
-         background-color: rgba(0, 0, 0, 0.1);
-     }
-
+    .lang-switcher button { padding: 0.3rem 0.7rem; margin: 0 0.2rem; border: 1px solid transparent; border-radius: 0.25rem; transition: background-color 0.2s, border-color 0.2s; }
+    .lang-switcher button.active { background-color: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.5); font-weight: bold; }
+    .lang-switcher button:not(.active):hover { background-color: rgba(255, 255, 255, 0.1); }
+    .dark .lang-switcher button.active { background-color: rgba(0, 0, 0, 0.2); border-color: rgba(255, 255, 255, 0.3); }
+    .dark .lang-switcher button:not(.active):hover { background-color: rgba(0, 0, 0, 0.1); }
   </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans leading-relaxed">
 
   <!-- Header -->
   <header class="bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-700 text-white text-center py-10 px-6 shadow-lg relative">
-    <!-- Language Switcher -->
     <div class="lang-switcher absolute top-4 right-4 text-sm">
       <button data-lang="en">EN</button>
       <button data-lang="nl">NL</button>
     </div>
-
-    <div class="max-w-4xl mx-auto pt-8"> <!-- Added padding top -->
+    <div class="max-w-4xl mx-auto pt-8">
       <h1 class="text-4xl md:text-5xl font-bold mb-4" data-translate="headerTitle">AI Data Governance</h1>
       <p class="text-xl mb-8 opacity-90" data-translate="headerSubtitle">Ensuring Compliance, Security & Transparency for AI Systems</p>
       <button onclick="location.href='readiness.html'" class="bg-white text-indigo-600 font-semibold px-8 py-3 rounded-lg shadow hover:bg-gray-100 transition duration-300" data-translate="startScanButton">
@@ -63,10 +38,11 @@
 
   <main class="max-w-5xl mx-auto p-6 space-y-12">
 
-    <!-- Key Features Section -->
+    <!-- Key Features Section (Keep as is) -->
     <section id="features" class="py-8">
       <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="featuresTitle">Key Features</h2>
       <div class="grid md:grid-cols-3 gap-6 text-center">
+         {/* ... Feature cards ... */}
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
           <h3 class="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400" data-translate="featureComplianceTitle">Compliance Monitoring</h3>
           <p data-translate="featureComplianceDesc">Automated checks against GDPR, EU AI Act, and more.</p>
@@ -83,36 +59,51 @@
        <p class="text-center mt-6 text-lg" data-translate="featureIntegration">Seamless Integration with ML Tools like TensorFlow, PyTorch, and Scikit-learn.</p>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-8 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-inner px-6">
+    <!-- NEW: Benefits Section -->
+    <section id="benefits" class="py-8 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-inner px-6">
+        <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="benefitsTitle">Unlock Responsible AI Innovation</h2>
+        <p class="text-center text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-3xl mx-auto" data-translate="benefitsIntro">
+            Effective AI governance isn't just about compliance; it's about building trust, mitigating risks, and confidently deploying AI solutions that drive value.
+        </p>
+        <div class="grid md:grid-cols-3 gap-6 text-left">
+            <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400" data-translate="benefitRiskTitle">Mitigate Compliance Risks</h3>
+                <p class="text-gray-700 dark:text-gray-300" data-translate="benefitRiskDesc">Navigate complex regulations like GDPR and the EU AI Act with automated monitoring and reporting, reducing the chance of costly fines.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-3 text-green-600 dark:text-green-400" data-translate="benefitTrustTitle">Build Stakeholder Trust</h3>
+                <p class="text-gray-700 dark:text-gray-300" data-translate="benefitTrustDesc">Ensure transparency in your AI operations. Demonstrate fairness, security, and ethical considerations to customers, partners, and regulators.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-3 text-purple-600 dark:text-purple-400" data-translate="benefitInnovationTitle">Accelerate Innovation Safely</h3>
+                <p class="text-gray-700 dark:text-gray-300" data-translate="benefitInnovationDesc">Deploy AI models faster and with confidence. Proactive governance removes roadblocks and ensures your innovations are robust and responsible.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section (Keep as is) -->
+    <section id="pricing" class="py-8"> {/* Removed background for variety */}
       <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="pricingTitle">Flexible Pricing Plans</h2>
       <div class="flex flex-wrap justify-center gap-4">
+          {/* ... Pricing buttons ... */}
         <button onclick="openModal('starterModal')" class="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow hover:bg-indigo-700 transition duration-300" data-translate="pricingStarter">Starter - $49/mo</button>
         <button onclick="openModal('professionalModal')" class="bg-purple-600 text-white px-6 py-3 rounded-lg shadow hover:bg-purple-700 transition duration-300" data-translate="pricingProfessional">Professional - $199/mo</button>
         <button onclick="openModal('enterpriseModal')" class="bg-gray-700 text-white px-6 py-3 rounded-lg shadow hover:bg-gray-800 transition duration-300" data-translate="pricingEnterprise">Enterprise - Contact Us</button>
       </div>
     </section>
 
-    <!-- News Section -->
-    <section id="news" class="py-8">
-      <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="newsTitle">Latest AI News</h2>
-      <div id="news-container" class="space-y-4">
-        <p class="text-center text-gray-500 dark:text-gray-400" data-translate="newsLoading">Loading latest AI news...</p>
-        <!-- News items will be loaded here -->
-      </div>
-    </section>
-
-    <!-- Trust & Compliance Section -->
+    {/* Trust & Compliance Section (Can be kept or merged into Benefits/Features if redundant) */}
     <section id="trust" class="py-8 text-center">
-      <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white" data-translate="trustTitle">Trust & Compliance</h2>
+      <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white" data-translate="trustTitle">Trust & Compliance Standards</h2>
       <p class="max-w-2xl mx-auto text-lg" data-translate="trustDesc">
-        Our platform is designed to help businesses comply with major regulations and standards like GDPR, the EU AI Act, and ISO 27001. Build trust through transparent and responsible AI.
+        Our platform helps you align with major regulations and standards like GDPR, the EU AI Act, and ISO 27001, fostering trust through responsible AI practices.
       </p>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact Section (Keep as is) -->
     <section id="contact" class="py-8 bg-white dark:bg-gray-800 rounded-lg shadow-md px-8">
-      <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="contactTitle">Get In Touch</h2>
+       {/* ... Contact form ... */}
+       <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white" data-translate="contactTitle">Get In Touch</h2>
       <form id="contact-form" class="max-w-xl mx-auto space-y-4">
         <div>
           <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-translate="contactNameLabel">Name:</label>
@@ -130,59 +121,60 @@
           <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-lg shadow hover:bg-green-700 transition duration-300" data-translate="contactSendButton">Send Message</button>
         </div>
         <p id="form-status" class="text-center mt-4 text-green-600 dark:text-green-400 hidden" data-translate-dynamic="formStatus"></p>
-        <!-- data-translate-dynamic used for content set by JS -->
       </form>
     </section>
 
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (Keep as is) -->
   <footer class="bg-gray-800 dark:bg-black text-gray-400 dark:text-gray-500 text-center py-6 mt-12">
-    <p data-translate="footerRights">© 2024 AI Data Governance. All rights reserved.</p>
+     {/* ... Footer content ... */}
+     <p data-translate="footerRights">© 2024 AI Data Governance. All rights reserved.</p>
   </footer>
 
-  <!-- Pricing Modals -->
-  <dialog id="starterModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
-    <h2 class="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400" data-translate="modalStarterTitle">Starter Plan - $49/month</h2>
-    <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalStarterDesc">Perfect for small teams getting started:</p>
-    <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
-      <li data-translate="modalStarterFeat1">Automated compliance alerts</li>
-      <li data-translate="modalStarterFeat2">Basic risk reports</li>
-      <li data-translate="modalStarterFeat3">Up to 2 AI models</li>
-    </ul>
-    <button onclick="closeModal('starterModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
-  </dialog>
+  <!-- Modals (Keep as is) -->
+   {/* ... Modals ... */}
+   <dialog id="starterModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400" data-translate="modalStarterTitle">Starter Plan - $49/month</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalStarterDesc">Perfect for small teams getting started:</p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
+        <li data-translate="modalStarterFeat1">Automated compliance alerts</li>
+        <li data-translate="modalStarterFeat2">Basic risk reports</li>
+        <li data-translate="modalStarterFeat3">Up to 2 AI models</li>
+        </ul>
+        <button onclick="closeModal('starterModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
+    </dialog>
 
-  <dialog id="professionalModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
-     <h2 class="text-2xl font-bold mb-4 text-purple-600 dark:text-purple-400" data-translate="modalProfTitle">Professional Plan - $199/month</h2>
-    <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalProfDesc">For growing teams needing deeper controls:</p>
-    <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
-      <li data-translate="modalProfFeat1">Advanced drift detection</li>
-      <li data-translate="modalProfFeat2">Data lineage tracking</li>
-      <li data-translate="modalProfFeat3">Regulatory audit dashboard</li>
-      <li data-translate="modalProfFeat4">Up to 10 AI models</li>
-    </ul>
-    <button onclick="closeModal('professionalModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
-  </dialog>
+    <dialog id="professionalModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-4 text-purple-600 dark:text-purple-400" data-translate="modalProfTitle">Professional Plan - $199/month</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalProfDesc">For growing teams needing deeper controls:</p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
+        <li data-translate="modalProfFeat1">Advanced drift detection</li>
+        <li data-translate="modalProfFeat2">Data lineage tracking</li>
+        <li data-translate="modalProfFeat3">Regulatory audit dashboard</li>
+        <li data-translate="modalProfFeat4">Up to 10 AI models</li>
+        </ul>
+        <button onclick="closeModal('professionalModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
+    </dialog>
 
-  <dialog id="enterpriseModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
-     <h2 class="text-2xl font-bold mb-4 text-gray-700 dark:text-gray-300" data-translate="modalEntTitle">Enterprise Plan - Contact Us</h2>
-    <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalEntDesc">Tailored for complex, large-scale AI operations:</p>
-    <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
-      <li data-translate="modalEntFeat1">Custom compliance frameworks</li>
-      <li data-translate="modalEntFeat2">Dedicated support & SLA</li>
-      <li data-translate="modalEntFeat3">On-premise or hybrid deployment</li>
-      <li data-translate="modalEntFeat4">Unlimited models</li>
-    </ul>
-    <button onclick="closeModal('enterpriseModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
-  </dialog>
+    <dialog id="enterpriseModal" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-4 text-gray-700 dark:text-gray-300" data-translate="modalEntTitle">Enterprise Plan - Contact Us</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300" data-translate="modalEntDesc">Tailored for complex, large-scale AI operations:</p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700 dark:text-gray-300">
+        <li data-translate="modalEntFeat1">Custom compliance frameworks</li>
+        <li data-translate="modalEntFeat2">Dedicated support & SLA</li>
+        <li data-translate="modalEntFeat3">On-premise or hybrid deployment</li>
+        <li data-translate="modalEntFeat4">Unlimited models</li>
+        </ul>
+        <button onclick="closeModal('enterpriseModal')" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300" data-translate="modalCloseButton">Close</button>
+    </dialog>
 
-  <!-- Zapier Chatbot -->
+  <!-- Zapier Chatbot (Keep as is) -->
   <script async type="module" src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js"></script>
   <zapier-interfaces-chatbot-embed is-popup="true" chatbot-id="cm8i6dnmz0019s3ik7xurhthg"></zapier-interfaces-chatbot-embed>
 
   <script>
-    // --- Translations Object ---
+    // --- Translations Object (Removed News, Added Benefits) ---
     const translations = {
       en: {
         pageTitle: "AI Data Governance - Compliance, Security & Transparency",
@@ -197,20 +189,21 @@
         featureRiskTitle: "Risk Management",
         featureRiskDesc: "Comprehensive data security and operational risk tools.",
         featureIntegration: "Seamless Integration with ML Tools like TensorFlow, PyTorch, and Scikit-learn.",
+        benefitsTitle: "Unlock Responsible AI Innovation",
+        benefitsIntro: "Effective AI governance isn't just about compliance; it's about building trust, mitigating risks, and confidently deploying AI solutions that drive value.",
+        benefitRiskTitle: "Mitigate Compliance Risks",
+        benefitRiskDesc: "Navigate complex regulations like GDPR and the EU AI Act with automated monitoring and reporting, reducing the chance of costly fines.",
+        benefitTrustTitle: "Build Stakeholder Trust",
+        benefitTrustDesc: "Ensure transparency in your AI operations. Demonstrate fairness, security, and ethical considerations to customers, partners, and regulators.",
+        benefitInnovationTitle: "Accelerate Innovation Safely",
+        benefitInnovationDesc: "Deploy AI models faster and with confidence. Proactive governance removes roadblocks and ensures your innovations are robust and responsible.",
         pricingTitle: "Flexible Pricing Plans",
         pricingStarter: "Starter - $49/mo",
         pricingProfessional: "Professional - $199/mo",
         pricingEnterprise: "Enterprise - Contact Us",
-        newsTitle: "Latest AI News",
-        newsLoading: "Loading latest AI news...",
-        newsSource: "Source",
-        newsPublished: "Published",
-        newsDescNone: "No description available.",
-        newsFetchError: "Could not fetch AI news at this time.",
-        newsFetchErrorDetail: "Could not fetch AI news at this time. {error}", // Placeholder for error message
-        newsNotFound: "No recent AI news found.",
-        trustTitle: "Trust & Compliance",
-        trustDesc: "Our platform is designed to help businesses comply with major regulations and standards like GDPR, the EU AI Act, and ISO 27001. Build trust through transparent and responsible AI.",
+        // REMOVED NEWS KEYS
+        trustTitle: "Trust & Compliance Standards", // Slightly rephrased
+        trustDesc: "Our platform helps you align with major regulations and standards like GDPR, the EU AI Act, and ISO 27001, fostering trust through responsible AI practices.", // Slightly rephrased
         contactTitle: "Get In Touch",
         contactNameLabel: "Name:",
         contactEmailLabel: "Email:",
@@ -218,6 +211,7 @@
         contactSendButton: "Send Message",
         formStatusSuccess: "Thank you! Your message has been sent. We'll get back to you soon.",
         footerRights: "© 2024 AI Data Governance. All rights reserved.",
+        // Modal translations (keep as before)
         modalStarterTitle: "Starter Plan - $49/month",
         modalStarterDesc: "Perfect for small teams getting started:",
         modalStarterFeat1: "Automated compliance alerts",
@@ -250,20 +244,21 @@
         featureRiskTitle: "Risicobeheer",
         featureRiskDesc: "Uitgebreide tools voor gegevensbeveiliging en operationele risico's.",
         featureIntegration: "Naadloze integratie met ML-tools zoals TensorFlow, PyTorch en Scikit-learn.",
+        benefitsTitle: "Ontsluit Verantwoorde AI Innovatie",
+        benefitsIntro: "Effectieve AI governance gaat niet alleen over naleving; het gaat om het opbouwen van vertrouwen, het beperken van risico's en het vol vertrouwen implementeren van AI-oplossingen die waarde toevoegen.",
+        benefitRiskTitle: "Beperk Nalevingsrisico's",
+        benefitRiskDesc: "Navigeer complexe regelgeving zoals AVG en de EU AI Act met geautomatiseerde monitoring en rapportage, waardoor de kans op kostbare boetes wordt verkleind.",
+        benefitTrustTitle: "Bouw Vertrouwen bij Belanghebbenden",
+        benefitTrustDesc: "Zorg voor transparantie in uw AI-activiteiten. Toon eerlijkheid, veiligheid en ethische overwegingen aan klanten, partners en toezichthouders.",
+        benefitInnovationTitle: "Versnel Innovatie Veilig",
+        benefitInnovationDesc: "Implementeer AI-modellen sneller en met vertrouwen. Proactieve governance verwijdert obstakels en zorgt ervoor dat uw innovaties robuust en verantwoordelijk zijn.",
         pricingTitle: "Flexibele Prijsplannen",
         pricingStarter: "Starter - €49/maand",
         pricingProfessional: "Professional - €199/maand",
         pricingEnterprise: "Enterprise - Neem contact op",
-        newsTitle: "Laatste AI Nieuws",
-        newsLoading: "Laatste AI nieuws laden...",
-        newsSource: "Bron",
-        newsPublished: "Gepubliceerd",
-        newsDescNone: "Geen beschrijving beschikbaar.",
-        newsFetchError: "Kon AI-nieuws nu niet ophalen.",
-        newsFetchErrorDetail: "Kon AI-nieuws nu niet ophalen. {error}",
-        newsNotFound: "Geen recent AI-nieuws gevonden.",
-        trustTitle: "Vertrouwen & Naleving",
-        trustDesc: "Ons platform is ontworpen om bedrijven te helpen voldoen aan belangrijke regelgeving en normen zoals AVG, de EU AI Act en ISO 27001. Bouw vertrouwen op door transparante en verantwoorde AI.",
+        // REMOVED NEWS KEYS
+        trustTitle: "Vertrouwen & Nalevingsnormen", // Iets anders verwoord
+        trustDesc: "Ons platform helpt u aan te sluiten bij belangrijke regelgeving en normen zoals AVG, de EU AI Act en ISO 27001, en bevordert vertrouwen door verantwoorde AI-praktijken.", // Iets anders verwoord
         contactTitle: "Neem Contact Op",
         contactNameLabel: "Naam:",
         contactEmailLabel: "E-mail:",
@@ -271,6 +266,7 @@
         contactSendButton: "Verstuur Bericht",
         formStatusSuccess: "Dank u! Uw bericht is verzonden. We nemen spoedig contact met u op.",
         footerRights: "© 2024 AI Data Governance. Alle rechten voorbehouden.",
+        // Modal translations (keep as before)
         modalStarterTitle: "Starter Plan - €49/maand",
         modalStarterDesc: "Perfect voor kleine teams die beginnen:",
         modalStarterFeat1: "Geautomatiseerde nalevingsmeldingen",
@@ -292,159 +288,63 @@
       }
     };
 
-    // --- Language Switching Logic ---
+    // --- Language Switching Logic (Identical to before) ---
     const defaultLang = 'en';
     let currentLang = localStorage.getItem('language') || defaultLang;
 
     function setLanguage(lang) {
-      if (!translations[lang]) {
-        console.warn(`Language "${lang}" not found. Falling back to ${defaultLang}.`);
-        lang = defaultLang;
-      }
-      currentLang = lang;
-      localStorage.setItem('language', lang);
-      document.documentElement.lang = lang;
-
-      // Update all elements with data-translate attribute
-      document.querySelectorAll('[data-translate]').forEach(element => {
-        const key = element.getAttribute('data-translate');
-        // Fallback to English if translation is missing in the selected language
-        const translation = translations[lang][key] || translations[defaultLang][key];
-        if (translation !== undefined) {
-            // Use innerHTML for elements that might contain HTML (like the footer)
-            if (key === 'footerRights') {
-                 element.innerHTML = translation;
-            } else {
-                 element.innerText = translation;
-            }
-        } else {
-          console.warn(`Translation key "${key}" not found in language "${lang}" or default "${defaultLang}".`);
-        }
-      });
-
-        // Update dynamic elements (like form status, news messages) if needed
-        // Note: These are typically updated when the event happens, but we might need default states
-         updateDynamicPlaceholders(lang);
-
-
-      // Update active button style
-      document.querySelectorAll('.lang-switcher button').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-      });
-
-      // Re-fetch news if the language changes, as error/loading messages need translation
-       fetchNews(lang); // Pass current language to fetchNews
+        // ... (Keep the exact same setLanguage function as before) ...
+        if (!translations[lang]) { lang = defaultLang; }
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            const translation = translations[lang][key] || translations[defaultLang][key];
+            if (translation !== undefined) {
+                if (key === 'footerRights') { element.innerHTML = translation; }
+                else { element.innerText = translation; }
+            } else { console.warn(`Translation key "${key}" not found.`); }
+        });
+        updateDynamicPlaceholders(lang);
+        document.querySelectorAll('.lang-switcher button').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
+        // No need to call fetchNews anymore
     }
 
      function updateDynamicPlaceholders(lang) {
-        // Example: Resetting form status message placeholder if needed
-        const statusElement = document.getElementById('form-status');
-        // This is tricky as status message appears *after* submit.
-        // We'll handle its translation *when it appears*.
-        // We only translate static placeholders here if any.
+        // Handle any static placeholder updates if needed
      }
 
-
-    // Add event listeners to buttons
     document.querySelectorAll('.lang-switcher button').forEach(button => {
-      button.addEventListener('click', () => {
-        const lang = button.getAttribute('data-lang');
-        setLanguage(lang);
-      });
+      button.addEventListener('click', () => { setLanguage(button.getAttribute('data-lang')); });
     });
 
-    // --- Existing Functions (Modified for i18n) ---
-
+    // --- Existing Functions (Modals, Form Handling - Keep as is) ---
     function openModal(modalId) { /* ... keep existing code ... */ }
     function closeModal(modalId) { /* ... keep existing code ... */ }
     document.querySelectorAll('dialog').forEach(dialog => { /* ... keep existing backdrop click code ... */ });
 
-    // Contact Form Handling (Translate success message)
     const contactForm = document.getElementById("contact-form");
     const formStatus = document.getElementById("form-status");
-    if (contactForm && formStatus) {
+    if (contactForm && formStatus) { /* ... keep existing submit handler ... */
         contactForm.addEventListener("submit", function(event) {
             event.preventDefault();
-            // Use the translation for the success message
             formStatus.textContent = translations[currentLang].formStatusSuccess || translations[defaultLang].formStatusSuccess;
             formStatus.classList.remove('hidden');
             formStatus.classList.remove('text-red-600');
             formStatus.classList.add('text-green-600', 'dark:text-green-400');
             this.reset();
-            setTimeout(() => {
-               formStatus.classList.add('hidden');
-               formStatus.textContent = '';
-            }, 5000);
+            setTimeout(() => { formStatus.classList.add('hidden'); formStatus.textContent = ''; }, 5000);
         });
     } else { console.error("Contact form or status element not found"); }
 
-
-    // News Fetching (Modified to accept lang and use translated messages)
-    function fetchNews(lang) {
-        const newsContainer = document.getElementById("news-container");
-        if (!newsContainer) {
-            console.error("News container not found");
-            return;
-        }
-        // Show loading message in the correct language
-        newsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">${translations[lang].newsLoading || translations[defaultLang].newsLoading}</p>`;
-
-        const apiKey = "050d73248da7e6e2c1560fb9526d1713"; // !! Replace or use backend !!
-        const keywords = "AI OR Artificial Intelligence OR Machine Learning Governance";
-        // Note: MediaStack API might support language param directly ('&languages=en' or '&languages=nl'), check their docs
-        const apiLangParam = (lang === 'nl') ? 'nl,en' : 'en'; // Request Dutch first if available, fallback English
-        const apiUrl = `https://api.mediastack.com/v1/news?access_key=${apiKey}&keywords=${encodeURIComponent(keywords)}&languages=${apiLangParam}&sort=published_desc&limit=4`;
-        const proxyUrl = "https://api.allorigins.win/get?url=";
-        const fullUrl = proxyUrl + encodeURIComponent(apiUrl);
-
-        fetch(fullUrl)
-            .then(response => { /* ... existing response checking ... */ return response.json(); })
-            .then(data => { /* ... existing data.contents checking ... */
-                const parsed = JSON.parse(data.contents);
-                /* ... existing parsed.error checking ... */
-
-                if (!parsed.data || parsed.data.length === 0) {
-                    newsContainer.innerHTML = `<p class='text-center text-gray-500 dark:text-gray-400'>${translations[lang].newsNotFound || translations[defaultLang].newsNotFound}</p>`;
-                    return;
-                }
-
-                newsContainer.innerHTML = ""; // Clear loading/error
-                parsed.data.forEach(article => {
-                    const newsItem = document.createElement('div');
-                    newsItem.className = "news-item bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300";
-                    const description = article.description || (translations[lang].newsDescNone || translations[defaultLang].newsDescNone);
-                    const sourceLabel = translations[lang].newsSource || translations[defaultLang].newsSource;
-                    const publishedLabel = translations[lang].newsPublished || translations[defaultLang].newsPublished;
-                    const publishedDate = article.published_at ? new Date(article.published_at).toLocaleDateString(lang === 'nl' ? 'nl-NL' : 'en-US') : 'N/A';
-
-                    newsItem.innerHTML = `
-                      <h3 class="text-lg font-semibold mb-1 text-indigo-700 dark:text-indigo-300">
-                        <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="hover:underline">${article.title || 'Untitled Article'}</a>
-                      </h3>
-                      <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${sourceLabel}: ${article.source || 'N/A'} | ${publishedLabel}: ${publishedDate}</p>
-                      <p class="text-gray-700 dark:text-gray-300">${description}</p>
-                    `;
-                    newsContainer.appendChild(newsItem);
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching news:", error);
-                let errorMsg = translations[lang].newsFetchError || translations[defaultLang].newsFetchError;
-                // Optionally include error details if translation key supports it
-                if (translations[lang].newsFetchErrorDetail) {
-                    errorMsg = translations[lang].newsFetchErrorDetail.replace('{error}', error.message);
-                } else if (translations[defaultLang].newsFetchErrorDetail) {
-                     errorMsg = translations[defaultLang].newsFetchErrorDetail.replace('{error}', error.message);
-                }
-                newsContainer.innerHTML = `<p class='text-center text-red-500 dark:text-red-400'>${errorMsg}</p>`;
-            });
-    }
-
+    // REMOVED fetchNews function
 
     // --- Initial Load ---
     document.addEventListener("DOMContentLoaded", () => {
       setLanguage(currentLang); // Apply initial language
-      // Initial news fetch is now handled within setLanguage
     });
 
   </script>
