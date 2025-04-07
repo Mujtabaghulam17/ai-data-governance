@@ -4,67 +4,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Title updated by JS -->
   <title data-translate="pageTitle">AI Readiness Scan</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    /* (Keep existing styles: body transition, fadeIn, form-radio, etc.) */
+    /* (Keep existing styles) */
      body { transition: background-color 0.3s ease; }
     #root > div { opacity: 0; animation: fadeIn 0.6s ease-out forwards; animation-fill-mode: forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    /* Style radio buttons better */
-    .form-radio {
-        appearance: none; border-radius: 50%; width: 1.25em; height: 1.25em;
-        border: 2px solid #6366f1; transition: 0.2s all linear; margin-right: 0.5em;
-        position: relative; top: 0.2em; cursor: pointer;
-    }
+    .form-radio { appearance: none; border-radius: 50%; width: 1.25em; height: 1.25em; border: 2px solid #6366f1; transition: 0.2s all linear; margin-right: 0.5em; position: relative; top: 0.2em; cursor: pointer; }
     .form-radio:checked { border: 6px solid #6366f1; }
     .dark .form-radio { border-color: #818cf8; }
     .dark .form-radio:checked { border-color: #818cf8; }
-
-     /* Style for language switcher */
-     .lang-switcher { text-align: right; margin-bottom: 1rem; }
-    .lang-switcher button {
-        padding: 0.3rem 0.7rem; margin: 0 0.2rem; border: 1px solid #d1d5db; /* gray-300 */
-        border-radius: 0.25rem; transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-        background-color: white; color: #374151; /* gray-700 */
-    }
-     .dark .lang-switcher button { background-color: #374151; border-color: #4b5563; color: #e5e7eb; }
+    .lang-switcher { text-align: right; margin-bottom: 1rem; }
+    .lang-switcher button { padding: 0.3rem 0.7rem; margin: 0 0.2rem; border: 1px solid #d1d5db; border-radius: 0.25rem; transition: background-color 0.2s, border-color 0.2s, color 0.2s; background-color: white; color: #374151; }
+    .dark .lang-switcher button { background-color: #374151; border-color: #4b5563; color: #e5e7eb; }
     .lang-switcher button.active { background-color: #4f46e5; border-color: #4f46e5; color: white; font-weight: bold; }
-     .dark .lang-switcher button.active { background-color: #6366f1; border-color: #6366f1; color: white; }
+    .dark .lang-switcher button.active { background-color: #6366f1; border-color: #6366f1; color: white; }
     .lang-switcher button:not(.active):hover { border-color: #6b7280; }
-     .dark .lang-switcher button:not(.active):hover { border-color: #9ca3af; }
+    .dark .lang-switcher button:not(.active):hover { border-color: #9ca3af; }
   </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col items-center justify-center p-4">
 
-   <!-- Static Elements (Header/Nav) -->
    <div class="w-full max-w-2xl mb-2 text-left">
        <a href="index.html" class="text-indigo-600 dark:text-indigo-400 hover:underline" data-translate="backToHome">← Back to Home</a>
    </div>
-
-   <!-- Language Switcher -->
-    <div class="lang-switcher w-full max-w-2xl">
+   <div class="lang-switcher w-full max-w-2xl">
       <button data-lang="en">EN</button>
       <button data-lang="nl">NL</button>
     </div>
-
-
-  <!-- Container for React app -->
   <div id="root" class="w-full max-w-2xl">
-      <!-- React component will be rendered here -->
       <div class="text-center p-10 text-gray-500" data-translate="loadingReact">Loading Scan...</div>
   </div>
 
-
-  <!-- Core JS: Translations and Language Logic (Outside React) -->
   <script>
-    // --- Translations Object (Keep as is from previous correct version) ---
+    // --- Translations Object (Keep as is) ---
     const translations = {
-        en: {
+        en: { /* ... English translations ... */
             pageTitle: "AI Readiness Scan", backToHome: "\u2190 Back to Home", loadingReact: "Loading Scan...",
             scanTitle: "AI Readiness Scan", scanIntro: "Assess your organization's current status on the following points (1 = not at all, 5 = fully implemented).",
             q1: "Does your organization have a clear, documented AI strategy defined?", q2: "Does your organization have sufficient quality, accessible, and relevant data for AI?",
@@ -78,8 +57,8 @@
             feedbackMid: "Good Progress: There's potential! Strengthen governance, invest in infrastructure, and develop necessary skills.",
             feedbackHigh: "Ready for Action: Excellent foundation! Your organization is ready to scale AI initiatives and pilot projects.",
             resultsEmailConfirm: "If an email function is configured on the server, you may receive a copy at {email}.", resultsResetButton: "Run Scan Again"
-        },
-        nl: {
+         },
+        nl: { /* ... Dutch translations ... */
             pageTitle: "AI Gereedheidsscan", backToHome: "\u2190 Terug naar Home", loadingReact: "Scan laden...",
             scanTitle: "AI Gereedheidsscan", scanIntro: "Beoordeel de huidige status van jouw organisatie op de volgende punten (1 = helemaal niet, 5 = volledig geïmplementeerd).",
             q1: "Heeft jouw organisatie een duidelijke, gedocumenteerde AI-strategie vastgelegd?", q2: "Beschikt jouw organisatie over voldoende kwalitatieve, toegankelijke en relevante data voor AI?",
@@ -116,22 +95,25 @@
         document.querySelectorAll('.lang-switcher button').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
         });
-        renderReactApp(lang); // Re-render React component
+        renderReactApp(lang);
     }
     document.querySelectorAll('.lang-switcher button').forEach(button => {
       button.addEventListener('click', () => { setLanguage(button.getAttribute('data-lang')); });
     });
 
-    // --- Function to Render React App (Fix inside JSX String) ---
+    // --- Function to Render React App ---
     function renderReactApp(lang) {
         if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined' && typeof Babel !== 'undefined') {
              try {
+                // Define the JSX code as a string literal
+                // PAY CLOSE ATTENTION TO THE RADIO BUTTON MAPPING PART
                 const jsxCode = `
                     const componentTranslations = translations;
                     const currentLang = '${lang}';
                     const { useState, useEffect } = React;
 
-                    const questions = [ { id: 1, text: "" }, { id: 2, text: "" }, { id: 3, text: "" }, { id: 4, text: "" }, { id: 5, text: "" } ]; // Structure only
+                    // Base question structure (text filled dynamically)
+                    const questions = [ { id: 1, text: "" }, { id: 2, text: "" }, { id: 3, text: "" }, { id: 4, text: "" }, { id: 5, text: "" } ];
                     const backendUrl = 'https://ai-readiness-backend.onrender.com/api/results';
 
                     const calculateAverageScore = (answers) => {
@@ -152,6 +134,7 @@
                         const { language, translations } = props;
                         const t = translations[language] || translations['${defaultLang}'];
                         const questionTextKeys = { 1: 'q1', 2: 'q2', 3: 'q3', 4: 'q4', 5: 'q5' };
+                        // Map questions *inside* the component to get translated text
                         const translatedQuestions = questions.map(q => ({ ...q, text: t[questionTextKeys[q.id]] || \`Question \${q.id} text missing\` }));
 
                         const [answers, setAnswers] = useState({});
@@ -187,7 +170,8 @@
                             finally { setIsLoading(false); }
                         };
 
-                        if (isSubmitted) { /* ... Results view JSX (keep as is) ... */
+                        // --- Results View ---
+                        if (isSubmitted) {
                             return (
                                 <div className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-xl shadow-xl text-center">
                                 <h2 className="text-2xl md:text-3xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">{t.resultsTitle}</h2>
@@ -204,7 +188,7 @@
                             );
                         }
 
-                        // --- Form View JSX (FIX IS HERE) ---
+                        // --- Form View (Verified Radio Button Code) ---
                         return (
                              <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-xl">
                                 <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">{t.scanTitle}</h2>
@@ -213,13 +197,13 @@
                                     {translatedQuestions.map((q, index) => (
                                         <fieldset key={q.id} className="border-t border-gray-200 dark:border-gray-700 pt-6">
                                             <legend className="block text-base font-semibold text-gray-800 dark:text-gray-200 mb-3">{index + 1}. {q.text}</legend>
+                                            {/* === THIS IS THE CRITICAL PART === */}
                                             <div className="flex flex-wrap gap-x-6 gap-y-3">
-                                                {/* **** CORRECTED PART START **** */}
                                                 {[1, 2, 3, 4, 5].map(val => (
                                                     <label key={val} className="inline-flex items-center cursor-pointer">
                                                         <input
                                                             type="radio"
-                                                            name={\`question_\${q.id}\`}
+                                                            name={\`question_\${q.id}\`} // Note the escaped backticks
                                                             value={val}
                                                             checked={answers[q.id] === val}
                                                             onChange={() => handleAnswerChange(q.id, val)}
@@ -229,19 +213,21 @@
                                                         <span className="ml-2 text-gray-700 dark:text-gray-300">{val}</span>
                                                     </label>
                                                 ))}
-                                                {/* **** CORRECTED PART END **** */}
                                             </div>
+                                            {/* === END OF CRITICAL PART === */}
                                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{t.scoreScale}</p>
                                         </fieldset>
                                     ))}
-                                    {/* ... Email Input, Error, Submit Button JSX (keep as is) ... */}
+                                    {/* Email Input */}
                                     <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                                         <label htmlFor="email" className="block text-base font-medium text-gray-800 dark:text-gray-200 mb-2">
                                             {t.emailLabel} <span className="text-sm font-normal text-gray-500 dark:text-gray-400">{t.emailOptional}</span>
                                         </label>
                                         <input type="email" id="email" value={email} onChange={handleEmailChange} className="w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500" placeholder={t.emailPlaceholder} />
                                     </div>
+                                    {/* Error Message */}
                                     {error && ( <p role="alert" className="text-red-600 dark:text-red-400 text-sm text-center font-medium p-3 bg-red-100 dark:bg-red-900 dark:bg-opacity-30 rounded-md">{error}</p> )}
+                                    {/* Submit Button */}
                                     <div className="text-center pt-4">
                                         <button type="submit" className={\`bg-indigo-600 text-white font-semibold px-10 py-3 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 w-full md:w-auto \${isLoading || !isFormComplete ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-lg'}\`} disabled={isLoading || !isFormComplete}>
                                             {isLoading ? ( <span className="flex items-center justify-center"><svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> {t.submittingButton}</span> ) : t.submitButton}
@@ -255,11 +241,21 @@
 
                     ReactDOM.render( <ReadinessScan language={'${lang}'} translations={componentTranslations} />, document.getElementById('root') );
                 `;
-                 const transformedCode = Babel.transform(jsxCode, { presets: ['react'] }).code;
-                 new Function(transformedCode)(); // Safer execution
+
+                // Log the code before transforming (for debugging)
+                console.log('JSX Code for Babel:', jsxCode);
+
+                const transformedCode = Babel.transform(jsxCode, { presets: ['react'] }).code;
+                 new Function(transformedCode)(); // Safer execution than eval
+
              } catch (error) {
                   console.error("Error rendering React component:", error);
-                  rootElement.innerHTML = \`<div class="text-center p-10 text-red-500">Error loading scan component. \${error.message}</div>\`; // Show error message in UI
+                  // Display error message in the UI for better feedback
+                  rootElement.innerHTML = `<div class="text-center p-10 text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-900 dark:bg-opacity-20 rounded-lg shadow">
+                                              <h3 class="font-bold mb-2">Error Loading Scan Component</h3>
+                                              <p class="text-sm font-mono">${error.message}</p>
+                                              <p class="text-xs mt-2">(Check browser console for more details)</p>
+                                           </div>`;
              }
         } else {
              console.error("React, ReactDOM, or Babel not loaded.");
@@ -269,7 +265,7 @@
 
     // --- Initial Load ---
     document.addEventListener("DOMContentLoaded", () => {
-      setLanguage(currentLang); // Apply initial language and render React app
+      setLanguage(currentLang);
     });
   </script>
 
